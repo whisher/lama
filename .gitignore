@@ -1,10 +1,11 @@
-bootstrap/compiled.php
 vendor
 nbproject/
-public/system/lib
+.bower-*/
 composer.phar
 composer.lock
+bootstrap/compiled.php
+public/system/lib
+app/config/locale
 .env.*.php
 .env.php
-.DS_Store
-Thumbs.db
+

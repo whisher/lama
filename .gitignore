@@ -5,7 +5,7 @@ composer.phar
 composer.lock
 bootstrap/compiled.php
 public/system/lib
-app/config/locale
+app/config/local
 .env.*.php
 .env.php
 

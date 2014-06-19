@@ -1,7 +1,7 @@
-/bootstrap/compiled.php
-/vendor
-/nbproject/
-/public/assets/lib
+bootstrap/compiled.php
+vendor
+nbproject/
+public/system/lib
 composer.phar
 composer.lock
 .env.*.php

@@ -6,15 +6,15 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">Lamb</a>
+        <a class="navbar-brand" data-ui-sref="home">Lama</a>
     </div><!--/.navbar-header -->
     <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-            <li class="active"><a data-ui-sref="home()">Home</a></li>
+            <li data-ng-class="{active: $state.includes('home')}"><a data-ui-sref="home">Home</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li class=""><a href="#">Register</a></li>
-            <li class=""><a href="#">Sign in</a></li>
+            <li data-ng-class="{active: $state.includes('auth.register')}"><a data-ui-sref="user.register">Register</a></li>
+            <li data-ng-class="{active: $state.includes('auth.signin')}"><a data-ui-sref="auth">Sign in</a></li>
         </ul>	
     </div><!--/.nav-collapse -->
 </div><!--/.container -->

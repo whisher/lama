@@ -57,13 +57,13 @@ App::error(function(Exception $exception, $code)
     switch ($code)
     {
        case 403:
-            return Response::view('error.403', array(), 403);
+            return Response::view('errors.403', array(), 403);
 
         case 500:
-            return Response::view('error.500', array(), 500);
+            return Response::view('errors.500', array(), 500);
 
         default:
-            return Response::view('error.404',array(),404);
+            return Response::view('errors.404',array(),404);
     }
 });
 
@@ -96,6 +96,7 @@ App::down(function()
 
 require app_path().'/filters.php';
 // Require the observables file.
+require app_path().'/observables.php';
 
 
 

@@ -1,14 +1,17 @@
 <?php  
 namespace App\Controllers;
 
-use \View; 
+use \BaseController,
+    \View; 
 
-class HomeController extends \BaseController
+class HomeController extends BaseController
 {
+    public $layout = 'layouts.home';
     
     public function index()
     { 
-        $this->layout->content = View::make('home.content');
+        $token = csrf_token();
+        $this->layout->content = View::make('home.content')->with('data', array('token'=>$token));
     }
     
- }
+}

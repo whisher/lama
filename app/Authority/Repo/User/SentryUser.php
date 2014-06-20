@@ -24,30 +24,42 @@ class SentryUser extends RepoAbstract implements UserInterface {
      * @return Response
      */
     public function store($data) {
-        $result = array('success' => false);
+        $result = array('success' => 0);
         try {
             //Attempt to register the user. 
-            $user = $this->sentry->register(array('email' => e($data['email']), 'password' => e($data['password'])));
-
+            $user = $this->sentry->register(
+                    array(
+                        'email' => e($data['email']), 
+                        'password' => e($data['password']), 
+                        'fullname' => e($data['fullname']), 
+                        'username' => e($data['username'])), true);
             //success!
-            $result['success'] = true;
-            $result['message'] = trans('user.created');
-            $result['mailData']['activationCode'] = $user->getActivationCode();
-            $result['mailData']['userId'] = $user->getId();
-            $result['mailData']['email'] = e($data['email']);
+            $result['success'] = 1;
+            $result['user'] = array(
+                'id' => $user->getId(), 
+                'fullname' => $user->getFullname(), 
+                'username' => $user->getUsername(), 
+                'email' => $user->getEmail());
             $userGroup = $this->sentry->getGroupProvider()->findByName('Users');
-		
-
-	    // Assign the groups to the users
-	    $user->addGroup($userGroup);
-            
+            // Assign the groups to the users
+            $user->addGroup($userGroup);
+            // Do login
+            $this->sentry->login($user, true);
         } catch (\Cartalyst\Sentry\Users\LoginRequiredException $e) {
-            $result['message'] = trans('user.loginreq');
+            $result['error'] = trans('user.loginreq');
         } catch (\Cartalyst\Sentry\Users\UserExistsException $e) {
-
-            $result['message'] = trans('user.exists');
+            $result['error'] = trans('user.exists');
+        } catch (Cartalyst\Sentry\Users\LoginRequiredException $e) {
+            $result['error'] = trans('user.loginreq');
+        } catch (Cartalyst\Sentry\Users\UserNotFoundException $e) {
+            $result['error'] = trans('user.notfound');
+        } catch (Cartalyst\Sentry\Users\UserNotActivatedException $e) {
+            $result['error'] = trans('user.notactivated');
+        } catch (\Illuminate\Database\QueryException $e) {
+            $result['error'] = trans('user.querror');
+        } catch (\Exception $e) {
+            $result['error'] = trans('user.generror');
         }
-
         return $result;
     }
 

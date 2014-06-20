@@ -38,17 +38,24 @@ Route::filter('auth', function()
 	if (!Sentry::check()){
             return Redirect::route('session.create');
         }
+    
 });
 
 Route::filter('loggedIn', function()
 {
 	if (Sentry::check()){
-            return Redirect::route('base.index.index');
+            // or exit ?
+            throw new RuntimeException();
         }
 });
 
 
-
+Route::filter('xsrf', function()
+{
+    if((!isset($_COOKIE['XSRF-TOKEN']) && is_null(Request::header('X-XSRF-TOKEN'))) || ($_COOKIE['XSRF-TOKEN'] !== Request::header('X-XSRF-TOKEN'))){
+        exit;
+    }
+});
 /*
 |--------------------------------------------------------------------------
 | CSRF Protection Filter
@@ -59,7 +66,7 @@ Route::filter('loggedIn', function()
 | session does not match the one given in this request, we'll bail.
 |
 */
-
+/*
 Route::filter('csrf', function()
 {
 	if (Session::token() !== Input::get('_token',''))
@@ -72,4 +79,6 @@ Route::filter('inGroup', function($route, $request, $value)
 {
 	//dd($route, $request, $value);
 });
+ * */
+ 
 

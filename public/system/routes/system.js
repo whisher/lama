@@ -1,18 +1,15 @@
 'use strict';
 
 //Setting up route
-angular.module('lamb.system').config(['$stateProvider', '$urlRouterProvider',
-        function($stateProvider, $urlRouterProvider) {console.log('fffffffffffffff');
-            // For unmatched routes:
+angular.module('lama.system')
+    .config(['$stateProvider', '$urlRouterProvider',
+        function($stateProvider, $urlRouterProvider) {
             $urlRouterProvider.otherwise('/');
-
-            // states for my app
             $stateProvider              
-                .state('home', {
-                    url: '/',
-                    templateUrl: 'public/system/views/index.html'
-                })
-                
+            .state('home', {
+                url: '/',
+                templateUrl: 'system/views/home.html'
+            })
         }
     ])
     .config(['$locationProvider',

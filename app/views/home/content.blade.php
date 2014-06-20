@@ -1,6 +1,7 @@
 @section('content')
-<div class="jumbotron">
-    <h1>Lamb Base Example</h1>
-    <p>This is an example</p>
-</div>
+<div class="content" data-ui-view></div>
+    <script type="text/javascript">
+        window.user = {}; 
+        document.cookie = "XSRF-TOKEN=<% $data['token'] %>";
+    </script>
 @stop

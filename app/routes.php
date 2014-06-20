@@ -2,7 +2,10 @@
 Blade::setContentTags('<%', '%>'); 		// for variables and all things Blade
 Blade::setEscapedContentTags('<%%', '%%>'); // for escaped data
 
-Route::get('/', array('as' => 'home', 'uses' => 'App\Controllers\HomeController@index'));
+/* Index */
+Route::get('/', array('as' => 'home', 'uses' => 'App\Controllers\HomeController@index'))->before('token');
+/* User register */
+Route::post('user', array('as' => 'base.user.store', 'uses' => 'App\Controllers\UserController@store'))->before('loggedIn|xsrf');  
 
 /*
 Route::group(array('before' => 'loggedIn'), function()

@@ -37,11 +37,11 @@ class RegisterForm {
      *
      * @return integer
      */
-    public function save(array $input) {
+    public function save(array $input) 
+    {
         if (!$this->valid($input)) {
             return false;
         }
-
         return $this->user->store($input);
     }
 
@@ -50,7 +50,8 @@ class RegisterForm {
      *
      * @return array 
      */
-    public function errors() {
+    public function errors() 
+    {
         return $this->validator->errors();
     }
 
@@ -59,8 +60,8 @@ class RegisterForm {
      *
      * @return boolean 
      */
-    protected function valid(array $input) {
-
+    protected function valid(array $input) 
+    {
         return $this->validator->with($input)->passes();
     }
 

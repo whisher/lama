@@ -11,4 +11,4 @@ angular.element(document).ready(function() {
 
 });
 
-angular.module('lama', ['ui.router','restangular','lama.system','lama.auth','lama.users']);
+angular.module('lama', ['ui.router','restangular','lama.system','lama.users']);

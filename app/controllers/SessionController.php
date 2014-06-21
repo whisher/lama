@@ -1,7 +1,8 @@
 <?php
 namespace App\Controllers;
 
-use \Event,
+use \Controller,
+    \Event,
     \Input;
 
 use Authority\Repo\Session\SessionInterface;
@@ -64,7 +65,7 @@ class SessionController extends Controller {
     public function destroy() {
         $this->session->destroy();
         Event::fire('session.logout');
-        return Redirect::to('/');
+        return Redirect::route('home');
     }
 
 }

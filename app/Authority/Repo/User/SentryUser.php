@@ -37,9 +37,9 @@ class SentryUser extends RepoAbstract implements UserInterface {
             $result['success'] = 1;
             $result['user'] = array(
                 'id' => $user->getId(), 
+                'email' => $user->getEmail(),
                 'fullname' => $user->getFullname(), 
-                'username' => $user->getUsername(), 
-                'email' => $user->getEmail());
+                'username' => $user->getUsername());
             $userGroup = $this->sentry->getGroupProvider()->findByName('Users');
             // Assign the groups to the users
             $user->addGroup($userGroup);

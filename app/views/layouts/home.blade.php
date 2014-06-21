@@ -34,12 +34,11 @@
         <script src="<% asset('system/lib/restangular/dist/restangular.min.js'); %>"></script>
         <script src="<% asset('init.js'); %>"></script>
         <script src="<% asset('system/system.js'); %>"></script>
+        <script src="<% asset('system/services/global.js'); %>"></script>
+        <script src="<% asset('system/services/interceptor.js'); %>"></script>
         <script src="<% asset('system/services/restify.js'); %>"></script>
         <script src="<% asset('system/routes/system.js'); %>"></script>
         <script src="<% asset('system/directives/system.js'); %>"></script>
-        <script src="<% asset('auth/auth.js'); %>"></script>
-        <script src="<% asset('auth/controllers/auth.js'); %>"></script>
-        <script src="<% asset('auth/routes/auth.js'); %>"></script>
         <script src="<% asset('users/users.js'); %>"></script>
         <script src="<% asset('users/services/users.js'); %>"></script>
         <script src="<% asset('users/controllers/users.js'); %>"></script>

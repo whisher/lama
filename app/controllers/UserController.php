@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use \BaseController,
+use \Controller,
     \Event,
     \Input,
     \Response,
@@ -10,7 +10,7 @@ use \BaseController,
     Authority\Service\Form\Register\RegisterForm,
     Authority\Service\Form\User\UserForm;
 
-class UserController extends BaseController{
+class UserController extends Controller{
 
     protected $user;
     protected $registerForm;

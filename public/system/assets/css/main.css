@@ -10,3 +10,17 @@
     color: #777;
     text-align: center;
 }
+
+/* Form required fields*/
+.form-group{
+    position:relative;
+    margin-right:15px;
+    padding-right:0;
+}
+.form-group:not(.form-no-required):after{
+    position:absolute;
+    content:'*';
+    color:red;
+    right:-10px;
+    top:0;
+}

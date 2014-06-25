@@ -10,16 +10,9 @@ class LoginFormLaravelValidator extends AbstractLaravelValidator {
 	 * @var Array 
 	 */
 	protected $rules = array(
-		'email' => 'required|min:4|max:32|email',
-		'password' => 'required|min:6'
+		'email' => 'required|email',
+		'password' => 'required'
 	);
 
-	/**
-	 * Custom Validation Messages
-	 *
-	 * @var Array 
-	 */
-	protected $messages = array(
-		//'email.required' => 'An email address is required.'
-	);
+	
 }

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" data-ng-controller="HeaderController">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="sr-only">Toggle navigation</span>
@@ -9,16 +9,23 @@
         <a class="navbar-brand" data-ui-sref="home">Lama</a>
     </div><!--/.navbar-header -->
     <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
-            <li data-ng-class="{active: $state.includes('home')}"><a data-ui-sref="home">Home</a></li>
+        <ul class="nav navbar-nav navbar-left">
+            <li data-ng-class="{active: $state.includes('home')}">
+                <a data-ui-sref="home">
+                    <i class="glyphicon glyphicon-home"></i>
+                    <span>Home</span>  
+                </a>
+            </li>
         </ul>
         <ul class="nav navbar-nav navbar-right" data-ng-if="!global.authenticated">
-            <li data-ng-class="{active: $state.includes('auth.register')}"><a data-ui-sref="auth.register">Register</a></li>
-            <li data-ng-class="{active: $state.includes('auth.signin')}"><a data-ui-sref="auth.signin">Sign in</a></li>
+            <li data-ng-class="{active: $state.includes('session.register')}"><a data-ui-sref="session.register">Register</a></li>
+            <li data-ng-class="{active: $state.includes('session.signin')}"><a data-ui-sref="session.signin">Sign in</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right" data-ng-if="global.authenticated">
             <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="glyphicon glyphicon-user"></i><span data-ng-bind="global.user.fullname"></span><b class="caret"></b></a>
                 <ul class="dropdown-menu">
+                    <li><a data-ui-sref="users.account({id: global.user.id})">Your account</a></li>
+                    <li><a href="/logout">Change Password</a></li>
                     <li><a href="/logout">Logout</a></li>
                 </ul>
             </li>

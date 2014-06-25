@@ -1,8 +1,9 @@
-# LAMB Stack
-LAMB is a boilerplate that provides a nice starting point for Laravel and AngularJS based applications.
+# LAMA Stack
+LAMA is a boilerplate that provides a nice starting point for Laravel and AngularJS based applications.
 
 ## Credits
 [Using Laravel 4 with Sentry 2](https://github.com/rydurham/L4withSentry)
+[MEAN fullstack javascript framework](http://mean.io)
 
 ### Tools Prerequisites
 * Composer - Dependency Manager for PHP, installing [Composer](https://getcomposer.org/)
@@ -18,3 +19,4 @@ LAMB is a boilerplate that provides a nice starting point for Laravel and Angula
     php artisan migrate --package=cartalyst/sentry
     php artisan migrate
     php artisan db:seed
+    php artisan key:generate

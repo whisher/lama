@@ -32,14 +32,21 @@
         <script src="<% asset('system/lib/angular-ui-router/release/angular-ui-router.min.js'); %>"></script>
         <script src="<% asset('system/lib/restangular/dist/restangular.min.js'); %>"></script>
         <script src="<% asset('system/lib/restangular/dist/restangular.min.js'); %>"></script>
+        <!-- Init -->
         <script src="<% asset('init.js'); %>"></script>
+        <!-- System -->
         <script src="<% asset('system/system.js'); %>"></script>
-        <script src="<% asset('system/services/global.js'); %>"></script>
         <script src="<% asset('system/services/interceptor.js'); %>"></script>
+        <script src="<% asset('system/services/global.js'); %>"></script>
         <script src="<% asset('system/services/restify.js'); %>"></script>
+        <script src="<% asset('system/controllers/header.js'); %>"></script>
         <script src="<% asset('system/routes/system.js'); %>"></script>
-        <script src="<% asset('system/directives/system.js'); %>"></script>
+        <script src="<% asset('system/directives/system.js'); %>"></script> 
+        <!-- Users -->
         <script src="<% asset('users/users.js'); %>"></script>
+        <script src="<% asset('users/services/session.js'); %>"></script>
+        <script src="<% asset('users/controllers/session.js'); %>"></script>
+        <script src="<% asset('users/routes/session.js'); %>"></script> 
         <script src="<% asset('users/services/users.js'); %>"></script>
         <script src="<% asset('users/controllers/users.js'); %>"></script>
         <script src="<% asset('users/routes/users.js'); %>"></script> 

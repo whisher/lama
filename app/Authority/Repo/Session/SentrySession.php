@@ -24,7 +24,7 @@ class SentrySession extends RepoAbstract implements SessionInterface {
      * @return Response
      */
     public function store($data) {
-        $result = array('success' => false);
+        $result = array('success' => 0);
         try {
             //Check for suspension or banned status
             $user = $this->sentry->getUserProvider()->findByLogin(e($data['email']));
@@ -43,26 +43,30 @@ class SentrySession extends RepoAbstract implements SessionInterface {
             } else {
                 $user = $this->sentry->authenticate($credentials, false);
             }
-            $result['success'] = true;
-            $result['data'] = array('userId' => $user->id, 'email' => $user->email);
-        } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
-            // Sometimes a user is found, however hashed credentials do
-            // not match. Therefore a user technically doesn't exist
-            // by those credentials. Check the error message returned
-            // for more information.
-            $result['message'] = trans('session.invalid');
-        } catch (\Cartalyst\Sentry\Users\UserNotActivatedException $e) {
-            $url = route('resendActivationForm');
-            $result['message'] = trans('session.notactive', array('url' => $url));
-        }
-        // The following is only required if throttle is enabled
+            $groups = array();
+            foreach($user->getGroups() as $group){
+                $groups[] = $group->name;
+            }
+            $result['success'] = 1;
+            
+            $result['user'] = array(
+                'id' => $user->getId(), 
+                'email' => $user->getEmail(),
+                'fullname' => $user->getFullname(), 
+                'username' => $user->getUsername(),
+                'groups'=>$groups);
+        } 
         catch (\Cartalyst\Sentry\Throttling\UserSuspendedException $e) {
             $time = $throttle->getSuspensionTime();
-            $result['message'] = trans('session.suspended');
+            $result['error'] = trans('session.suspended');
         } catch (\Cartalyst\Sentry\Throttling\UserBannedException $e) {
-            $result['message'] = trans('session.banned');
+            $result['error'] = trans('session.banned');
         }
-        //Login was succesful.  
+        catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
+            $result['error'] = trans('session.invalid');
+        } catch (\Cartalyst\Sentry\Users\UserNotActivatedException $e) {
+           $result['error'] = trans('session.notactive');
+        }
         return $result;
     }
 

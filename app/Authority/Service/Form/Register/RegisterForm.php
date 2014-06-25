@@ -27,7 +27,8 @@ class RegisterForm {
      */
     protected $user;
 
-    public function __construct(ValidableInterface $validator, UserInterface $user) {
+    public function __construct(ValidableInterface $validator, UserInterface $user)
+    {
         $this->validator = $validator;
         $this->user = $user;
     }

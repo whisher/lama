@@ -3,24 +3,18 @@ namespace App\Controllers;
 
 use \Controller,
     \Event,
-    \Input;
+    \Input,
+    \Redirect,
+    \Response;
 
 use Authority\Repo\Session\SessionInterface;
 use Authority\Service\Form\Login\LoginForm;
 
 class SessionController extends Controller {
 
-    
-
-    /**
-     * Member Vars
-     */
     protected $session;
     protected $loginForm;
 
-    /**
-     * Constructor
-     */
     public function __construct(SessionInterface $session, LoginForm $loginForm) 
     {
         $this->session = $session;
@@ -28,32 +22,30 @@ class SessionController extends Controller {
     }
 
     /**
-     * Show the login form
-     */
-    public function create(){}
-
-    /**
-     * Store a newly created resource in storage.
+     * Try to login user.
      *
-     * @return Response
+     * @return json
      */
-    public function store() { 
-        // Form Processing
+    public function store() 
+    { 
+        
         $result = $this->loginForm->save(Input::all());
-       
-        if (isset($result['success']) && isset($result['data']) && $result['success']) {
-            Event::fire('session.login', array(
-                'userId' => $result['data']['userId'],
-                'email' => $result['data']['email']
-            ));
-            // Success!
-            return Redirect::route('base.index.index');
-        } elseif (count($this->loginForm->errors()) > 0) {
-            return Redirect::route('session.create')->withInput()->withErrors(array('error' => trans('session.invalid')));
-        } else {
-            Session::flash('error', $result['message']);
-            return Redirect::route('session.create')->withInput()->withErrors(array('error' => $result['message']));
-        }
+        if (isset($result['user']) && $result['success']) {
+            Event::fire('user.register', $result['user']);
+            return Response::json($result,200);
+        } 
+        if (isset($result['error'])) {
+            $error = array_pop($result);
+            return Response::json(array(
+              'success'=>0,
+              'errors' => array('error'=>array($error))),  
+            200);
+        } 
+        return Response::json(array(
+                'success'=>0,
+                'errors' => $this->loginForm->errors()),
+                200
+        );
     }
 
     /**

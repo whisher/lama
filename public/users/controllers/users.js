@@ -1,38 +1,26 @@
 'use strict';
 
 angular.module('lama.users')
-    .controller('UserSigninCtrl', ['$scope', '$rootScope', '$http', '$location',
-        function($scope, $rootScope, $http, $location) {
-            // This object will be filled by the form
-            $scope.user = {};
-            $scope.error = '';
-            // Register the login() function
-            $scope.login = function() {
-                $http.post('/signin', $scope.user)
-                .success(function(response) {
-                    $rootScope.user = response.user;
-                    $rootScope.$emit('loggedin');
-                    $location.url('/');
-                })
-                .error(function() {
-                    $scope.error = 'Authentication failed.';
-                });
-            };
+    .controller('UserCtrl', ['$scope',
+        function($scope) {
+           
         }
     ])
-    .controller('UserRegisterCtrl', ['$rootScope', '$scope', '$state', 'User',
-        function($rootScope, $scope, $state, User) {
-            $scope.user = {};
+    .controller('UserAccountCtrl', ['$rootScope', '$scope', '$state', 'user',
+        function($rootScope, $scope, $state, user) {
+            $scope.user = user;
             $scope.errors = null;
             $scope.save = function(){
-                User.store($scope.user).then(
+                $scope.user.put().then(
                     function(data) {
                         if(data.success){
-                            return $state.go('home');
+                               $rootScope.global.user = data.user;
+                               $rootScope.$emit('loggedin');
+                               return $state.go('home');
+                            }
+                            $scope.errors = data.errors;
                         }
-                        $scope.errors = data.errors;
-                    }
-                );
-            };
+                    );
+                };
         }
     ]);

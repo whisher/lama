@@ -96,7 +96,7 @@ App::down(function()
 
 require app_path().'/filters.php';
 // Require the observables file.
-require app_path().'/observables.php';
+require app_path().'/events.php';
 
 
 

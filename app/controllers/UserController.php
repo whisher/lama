@@ -16,10 +16,6 @@ class UserController extends Controller{
     protected $registerForm;
     protected $userForm;
    
-
-    /**
-     * Instantiate a new UserController
-     */
     public function __construct(UserInterface $user, RegisterForm $registerForm, UserForm $userForm) 
     {
         $this->user = $user;
@@ -42,21 +38,14 @@ class UserController extends Controller{
     }
 
     /**
-     *  Show the form for creating a new user.
-     *
-     * @return Response
-     */
-    public function create(){}
-
-    /**
      * Store a newly created user.
      *
-     * @return Response
+     * @return json
      */
     public function store() {
         // Form Processing
         $result = $this->registerForm->save(Input::all());
-        if ($result['success']) {
+        if (isset($result['user']) && $result['success']) {
             Event::fire('user.register', $result['user']);
             return Response::json($result,200);
         } 
@@ -80,43 +69,17 @@ class UserController extends Controller{
      * @param  int  $id
      * @return Response
      */
-    public function show($id) {
+    public function show($id) 
+    {
         $user = $this->user->byId($id);
-
-        if ($user == null || !is_numeric($id)) {
-            // @codeCoverageIgnoreStart
-            return \App::abort(404);
-            // @codeCoverageIgnoreEnd
+        if(!$user){
+           return Response::make('Not Found', 404);
         }
-
-        return View::make('users.show')->with('user', $user);
+        return Response::json($user->toArray(),  
+            200); 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id) {
-        $user = $this->user->byId($id);
-
-        if ($user == null || !is_numeric($id)) {
-            // @codeCoverageIgnoreStart
-            return \App::abort(404);
-            // @codeCoverageIgnoreEnd
-        }
-
-        $currentGroups = $user->getGroups()->toArray();
-        $userGroups = array();
-        foreach ($currentGroups as $group) {
-            array_push($userGroups, $group['name']);
-        }
-        $allGroups = $this->group->all();
-
-        return View::make('users.edit')->with('user', $user)->with('userGroups', $userGroups)->with('allGroups', $allGroups);
-    }
-
+    
     /**
      * Update the specified resource in storage.
      *

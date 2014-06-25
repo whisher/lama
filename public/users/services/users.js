@@ -4,13 +4,6 @@
 angular.module('lama.users')
     .config(['RestangularProvider',function(RestangularProvider) {
         RestangularProvider.setBaseUrl('/');
-        RestangularProvider.setRequestInterceptor(function(elem, operation, what) {
-            if (operation === 'put') {
-                elem._id = undefined;
-                return elem;
-            }
-            return elem;
-        }); 
     }])
     .factory('User', ['Restify', function(Restify) {
         function User() {}

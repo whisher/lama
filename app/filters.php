@@ -1,16 +1,31 @@
 <?php
 /* Check if a user is just logged */
-Route::filter('loggedOut', function()
+Route::filter('issessionedin', function()
 {
     if (Sentry::check()){
         return Response::make('Forbidden', 403);
     }
 });
 
-Route::filter('auth', function()
+Route::filter('isloggedin', function()
 {
     if (!Sentry::check()){
         return Response::make('Unauthorized', 401);
+    }
+});
+
+Route::filter('hasAuthAndIsOwner', function($route)
+{
+    $check = Sentry::check();
+    if (!$check){
+        return Response::make('Unauthorized', 401);
+    }
+    if($check){
+        $id = $route->getParameter('id');
+        $user = Sentry::getUser();
+        if($id !== $user->id){
+           return Response::make('Unauthorized', 401); 
+        }
     }
 });
 

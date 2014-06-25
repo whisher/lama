@@ -1,5 +1,6 @@
 <?php namespace Authority\Repo\User;
 
+use \Config;
 use Mail;
 use Cartalyst\Sentry\Sentry;
 use Authority\Repo\RepoAbstract;
@@ -39,12 +40,15 @@ class SentryUser extends RepoAbstract implements UserInterface {
                 'id' => $user->getId(), 
                 'email' => $user->getEmail(),
                 'fullname' => $user->getFullname(), 
-                'username' => $user->getUsername());
+                'username' => $user->getUsername(),
+                'groups'=>array('Users'));
             $userGroup = $this->sentry->getGroupProvider()->findByName('Users');
             // Assign the groups to the users
             $user->addGroup($userGroup);
             // Do login
-            $this->sentry->login($user, true);
+            if(Config::get('lama.loggedafterregister')){
+                $this->sentry->login($user, true);
+            }
         } catch (\Cartalyst\Sentry\Users\LoginRequiredException $e) {
             $result['error'] = trans('user.loginreq');
         } catch (\Cartalyst\Sentry\Users\UserExistsException $e) {

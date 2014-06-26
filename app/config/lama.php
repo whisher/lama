@@ -1,5 +1,6 @@
 <?php
 
 return array(
-    'loggedafterregister'=>true
+    'loggedafterregister'=>true,
+    'activatedafterregister'=>true
     );

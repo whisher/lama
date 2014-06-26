@@ -4,24 +4,21 @@ namespace App\Controllers;
 use \Controller,
     \Event,
     \Input,
-    \Response,
-    Authority\Repo\User\UserInterface,
-    Authority\Repo\Group\GroupInterface,
-    Authority\Service\Form\Register\RegisterForm,
-    Authority\Service\Form\User\UserForm;
+    \Response;
+    
+use Users\User\UserInterface;
+use Users\Form\Register\RegisterForm;
 
 class UserController extends Controller{
 
     protected $user;
     protected $registerForm;
-    protected $userForm;
+    
    
-    public function __construct(UserInterface $user, RegisterForm $registerForm, UserForm $userForm) 
+    public function __construct(UserInterface $user, RegisterForm $registerForm) 
     {
         $this->user = $user;
         $this->registerForm = $registerForm;
-        $this->userForm = $userForm;
-       
     }
 
     /**
@@ -42,20 +39,21 @@ class UserController extends Controller{
      *
      * @return json
      */
-    public function store() {
-        // Form Processing
-        $result = $this->registerForm->save(Input::all());
-        if (isset($result['user']) && $result['success']) {
-            Event::fire('user.register', $result['user']);
-            return Response::json($result,200);
-        } 
-        if (isset($result['error'])) {
-            $error = array_pop($result);
+    public function store() 
+    {
+        $isValid = $this->registerForm->valid(Input::only('fullname','email','username','password','password_confirmation'));
+        if($isValid){
+            $result = $this->user->store($this->registerForm->data());
+            if (isset($result['user']) && $result['success']) {
+                Event::fire('user.register', $result['user']);
+                return Response::json($result,200);
+            } 
+            $error = isset($result['error'])?array_pop($result):trans('user.generror');
             return Response::json(array(
               'success'=>0,
               'errors' => array('error'=>array($error))),  
             200);
-        } 
+        }
         return Response::json(array(
                 'success'=>0,
                 'errors' => $this->registerForm->errors()),

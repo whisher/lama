@@ -7,18 +7,18 @@ use \Controller,
     \Redirect,
     \Response;
 
-use Authority\Repo\Session\SessionInterface;
-use Authority\Service\Form\Login\LoginForm;
+use Users\Session\SessionInterface;
+use Users\Form\Signin\SigninForm;
 
 class SessionController extends Controller {
 
     protected $session;
-    protected $loginForm;
+    protected $signinForm;
 
-    public function __construct(SessionInterface $session, LoginForm $loginForm) 
+    public function __construct(SessionInterface $session, SigninForm $signinForm) 
     {
         $this->session = $session;
-        $this->loginForm = $loginForm;
+        $this->signinForm = $signinForm;
     }
 
     /**
@@ -28,31 +28,28 @@ class SessionController extends Controller {
      */
     public function store() 
     { 
-        
-        $result = $this->loginForm->save(Input::all());
-        if (isset($result['user']) && $result['success']) {
-            Event::fire('user.register', $result['user']);
-            return Response::json($result,200);
-        } 
-        if (isset($result['error'])) {
-            $error = array_pop($result);
+        $isValid = $this->signinForm->valid(Input::only('email', 'password'));
+        if ($isValid) {
+            $result = $this->session->store($this->signinForm->data());
+            if (isset($result['user']) && $result['success']) {
+                Event::fire('user.register', $result['user']);
+                return Response::json($result, 200);
+            }
+            $error = isset($result['error'])?array_pop($result):trans('session.invalid');
             return Response::json(array(
-              'success'=>0,
-              'errors' => array('error'=>array($error))),  
-            200);
-        } 
+                        'success' => 0,
+                        'errors' => array('error' => array($error))), 200);
+        }
         return Response::json(array(
-                'success'=>0,
-                'errors' => $this->loginForm->errors()),
-                200
+                    'success' => 0,
+                    'errors' => $this->signinForm->errors()), 200
         );
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return Response
+     * @return Redirect
      */
     public function destroy() {
         $this->session->destroy();

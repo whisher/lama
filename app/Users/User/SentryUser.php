@@ -53,11 +53,11 @@ class SentryUser implements UserInterface {
             $result['error'] = trans('user.loginreq');
         } catch (\Cartalyst\Sentry\Users\UserExistsException $e) {
             $result['error'] = trans('user.exists');
-        } catch (Cartalyst\Sentry\Users\LoginRequiredException $e) {
+        } catch (\Cartalyst\Sentry\Users\LoginRequiredException $e) {
             $result['error'] = trans('user.loginreq');
-        } catch (Cartalyst\Sentry\Users\UserNotFoundException $e) {
+        } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
             $result['error'] = trans('user.notfound');
-        } catch (Cartalyst\Sentry\Users\UserNotActivatedException $e) {
+        } catch (\Cartalyst\Sentry\Users\UserNotActivatedException $e) {
             $result['error'] = trans('user.notactivated');
         } catch (\Illuminate\Database\QueryException $e) {
             $result['error'] = trans('user.querror');
@@ -68,12 +68,92 @@ class SentryUser implements UserInterface {
     }
 
     /**
+     * Update account.
+     *
+     * @return Array
+     */
+    public function account($id,$data) 
+    {
+        $result = array('success' => 0);
+        try {
+            $user = $this->sentry->findUserById($id);
+            $fullname = e($data['fullname']);
+            $email = e($data['email']);
+            $username = e($data['username']);
+            if($username !== $user->username ){
+                $user->username = $username;
+            }
+            if($email !== $user->email ){
+                $user->email = $email;
+            }
+            $user->fullname = $fullname;
+            $user->save();
+            $result['success'] = 1;
+            $result['user'] = array(
+                'id' => $user->getId(),
+                'email' => $user->email,
+                'fullname' => $user->fullname,
+                'username' => $user->username,
+            );
+            
+        } catch (\Cartalyst\Sentry\Users\UserExistsException $e) {
+            $result['error'] = trans('user.exists');
+        } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
+            $result['error'] = trans('user.notfound');
+        } catch (\Illuminate\Database\QueryException $e) {
+            $result['error'] = trans('user.exists');
+        }catch (\Exception $e) {
+            $result['error'] = trans('user.generror');
+        }
+        return $result;
+    }
+    
+    /**
+     * Update account.
+     *
+     * @return Array
+     */
+    public function password($id,$data) 
+    {
+        $result = array('success' => 0);
+        try {
+            $user = $this->sentry->findUserById($id);
+            if ($user->checkHash(e($data['old_password']), $user->getPassword())){
+                $user->password = e($data['password']);
+                $user->save();
+                $result['success'] = 1;
+                $result['user'] = array(
+                    'id' => $user->getId(),
+                    'email' => $user->email,
+                    'fullname' => $user->fullname,
+                    'username' => $user->username
+                );
+            }
+            else {
+                $result['error'] = trans('user.oldpassword');
+            }        
+        } catch (\Cartalyst\Sentry\Users\LoginRequiredException $e){
+            $result['error'] = trans('loginreq');
+	}
+        catch (\Cartalyst\Sentry\Users\UserExistsException $e) {
+            $result['error'] = trans('user.exists');
+        } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
+            $result['error'] = trans('user.notfound');
+        } catch (\Illuminate\Database\QueryException $e) {
+            $result['error'] = trans('user.exists');
+        }catch (\Exception $e) {
+            $result['error'] = trans('user.generror');
+        }
+        return $result;
+    }
+    
+    /**
      * Update the specified resource in storage.
      *
      * @param  array $data
      * @return Response
      */
-    public function update($data) {
+    public function update($id,$data) {
         $result = array();
         try {
             // Find the user using the user id

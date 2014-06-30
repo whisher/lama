@@ -13,7 +13,10 @@ Route::get('/', array('as' => 'home', 'uses' => 'App\Controllers\HomeController@
 /* User */
 Route::post('user', array('as' => 'base.user.store', 'uses' => 'App\Controllers\UserController@store'))->before('issessionedin|xhr|xsrf'); 
 Route::get('user/{id}', array('as' => 'base.user.show', 'uses' => 'App\Controllers\UserController@show'))->where('id', '[0-9]+')->before('hasAuthAndIsOwner');
-Route::put('user/{id}', array('as' => 'base.user.edit', 'uses' => 'App\Controllers\UserController@update'))->where('id', '[0-9]+')->before('hasAuthAndIsOwner');
+Route::put('user/{id}', array('as' => 'base.user.update', 'uses' => 'App\Controllers\UserController@update'))->where('id', '[0-9]+')->before('xhr|xsrf|hasAuthAndIsOwner');
+Route::put('user/{id}/account', array('as' => 'base.user.account', 'uses' => 'App\Controllers\UserController@account'))->where('id', '[0-9]+')->before('xhr|xsrf|hasAuthAndIsOwner');
+Route::put('user/{id}/password', array('as' => 'base.user.password', 'uses' => 'App\Controllers\UserController@password'))->where('id', '[0-9]+')->before('xhr|xsrf|hasAuthAndIsOwner');
+
 
 /* Session */
 Route::get('logout', array('as' => 'session.destroy', 'uses' => 'App\Controllers\SessionController@destroy'));

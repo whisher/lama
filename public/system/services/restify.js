@@ -5,17 +5,20 @@ angular.module('lama.system')
         return function(route){
             var elements = Restangular.all(route);
             return {
-                one : function (id) {
+                get : function (id) {
                     return Restangular.one(route, id).get();
                 },
-                all : function () {
+                getList : function () {
                     return elements.getList();
                 },
-                store : function(data) {
+                post : function(data) {
                     return elements.post(data);
                 },
                 copy : function(original) {
                     return Restangular.copy(original);
+                },
+                one : function(id) {
+                    return Restangular.one(route, id);
                 },
                 getElements : function() {
                     return elements;

@@ -25,7 +25,7 @@
             <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="glyphicon glyphicon-user"></i><span data-ng-bind="global.user.fullname"></span><b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li><a data-ui-sref="users.account({id: global.user.id})">Your account</a></li>
-                    <li><a href="/logout">Change Password</a></li>
+                    <li><a data-ui-sref="users.password({id: global.user.id})">Change Password</a></li>
                     <li><a href="/logout">Logout</a></li>
                 </ul>
             </li>

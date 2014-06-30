@@ -6,21 +6,45 @@ angular.module('lama.users')
            
         }
     ])
-    .controller('UserAccountCtrl', ['$rootScope', '$scope', '$state', 'user',
-        function($rootScope, $scope, $state, user) {
-            $scope.user = user;
+    .controller('UserAccountCtrl', ['$rootScope', '$scope', '$state', 'user', 'User',
+        function($rootScope, $scope, $state, user, User) {
+            $scope.user =  user;
+            var account = User.account($scope.user.id);
             $scope.errors = null;
             $scope.save = function(){
-                $scope.user.put().then(
+                account.fullname = $scope.user.fullname;
+                account.email = $scope.user.email;
+                account.username = $scope.user.username;
+                account.put().then(
                     function(data) {
                         if(data.success){
-                               $rootScope.global.user = data.user;
-                               $rootScope.$emit('loggedin');
-                               return $state.go('home');
-                            }
-                            $scope.errors = data.errors;
+                            $rootScope.global.user.fullname = data.user.fullname;
+                            return $state.go('home');
                         }
-                    );
-                };
+                        $scope.errors = data.errors;
+                    }
+                );
+            };
+        }
+    ])
+    .controller('UserPasswordCtrl', ['$rootScope', '$scope', '$state', 'user', 'User',
+        function($rootScope, $scope, $state, user, User) {
+            $scope.user =  {};
+            var password = User.password(user.id);
+            $scope.errors = null;
+            $scope.save = function(){
+                password.old_password = $scope.old_password;
+                password.password = $scope.user.password;
+                password.password_confirmation = $scope.user.password_confirmation;
+                password.put().then(
+                    function(data) {
+                        if(data.success){
+                            return $state.go('home');
+                        }
+                        $scope.errors = data.errors;
+                    }
+                );
+            };
         }
     ]);
+    

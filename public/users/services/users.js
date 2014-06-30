@@ -6,6 +6,13 @@ angular.module('lama.users')
         RestangularProvider.setBaseUrl('/');
     }])
     .factory('User', ['Restify', function(Restify) {
-        function User() {}
+        function User() {
+            this.account = function(id){
+                return this.one(id).one('account');
+            };
+            this.password = function(id){
+                return this.one(id).one('password');
+            };
+        }
         return angular.extend(Restify('user'), new User());
     }]);

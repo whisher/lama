@@ -8,23 +8,25 @@ use \Controller,
     
 use Users\User\UserInterface;
 use Users\Form\Register\RegisterForm;
+use Users\Form\Update\UpdateForm;
 
 class UserController extends Controller{
 
     protected $user;
     protected $registerForm;
-    
+    protected $updateForm;
    
-    public function __construct(UserInterface $user, RegisterForm $registerForm) 
+    public function __construct(UserInterface $user, RegisterForm $registerForm, UpdateForm $updateForm) 
     {
         $this->user = $user;
         $this->registerForm = $registerForm;
+        $this->updateForm = $updateForm;
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return json
      */
     public function index() 
     {
@@ -77,14 +79,102 @@ class UserController extends Controller{
             200); 
     }
 
+    /**
+     * Update the user.
+     *
+     * @param  int  $id
+     * @return json
+     */
+    public function account($id) 
+    {
+        $isValid = $this->updateForm->valid(Input::only('fullname', 'email', 'username'));
+        if ($isValid) {
+            $result = $this->user->account($id,$this->updateForm->data());
+            if (isset($result['user']) && $result['success']) {
+                return Response::json($result,200);
+            } 
+            $error = isset($result['error'])?array_pop($result):trans('user.generror');
+            return Response::json(array(
+              'success'=>0,
+              'errors' => array('error'=>array($error))),  
+            200);
+        }
+        return Response::json(array(
+                    'success' => 0,
+                    'errors' => $this->updateForm->errors()), 
+                    200
+        );
+    }
     
+    /**
+     * Update the user.
+     *
+     * @param  int  $id
+     * @return json
+     */
+    public function password($id) 
+    {
+        $isValid = $this->updateForm->valid(Input::only('old_password' ,'password','password_confirmation'));
+        if ($isValid) {
+            $result = $this->user->password($id,$this->updateForm->data());
+            if (isset($result['user']) && $result['success']) {
+                return Response::json($result,200);
+            } 
+            $error = isset($result['error'])?array_pop($result):trans('user.generror');
+            return Response::json(array(
+              'success'=>0,
+              'errors' => array('error'=>array($error))),  
+            200);
+        }
+        return Response::json(array(
+                    'success' => 0,
+                    'errors' => $this->updateForm->errors()), 
+                    200
+        );
+    }
+    
+    /**
+     * Update the user.
+     *
+     * @param  int  $id
+     * @return json
+     */
+    public function update($id) 
+    {
+        $action = Input::get('action');
+        if (empty($action) || !in_array($action, array('account'))) {
+            return Response::make('Not Found', 404);
+        }
+        if ($action === 'account') {
+            $isValid = $this->updateForm->valid(Input::only('id','fullname', 'email', 'username'));
+            if($isValid){
+                $result = $this->user->account($this->updateForm->data());
+                dd($result);
+                if (isset($result['user']) && $result['success']) {
+                    Event::fire('user.register', $result['user']);
+                    return Response::json($result,200);
+                } 
+                $error = isset($result['error'])?array_pop($result):trans('user.generror');
+                return Response::json(array(
+                  'success'=>0,
+                  'errors' => array('error'=>array($error))),  
+                200);
+            }
+            return Response::json(array(
+                'success'=>0,
+                'errors' => $this->updateForm->errors()),
+                200
+            );
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *
      * @param  int  $id
      * @return Response
      */
-    public function update($id) {
+    /*public function update($id) {
         if (!is_numeric($id)) {
             // @codeCoverageIgnoreStart
             return \App::abort(404);
@@ -104,7 +194,7 @@ class UserController extends Controller{
                             ->withInput()
                             ->withErrors($this->userForm->errors());
         }
-    }
+    }*/
 
     /**
      * Remove the specified resource from storage.

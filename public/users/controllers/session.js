@@ -21,12 +21,12 @@ angular.module('lama.users')
             };
         }
     ])
-    .controller('SessionRegisterCtrl', ['$rootScope', '$scope', '$state',/*'$timeout',*/ 'Session', 'User',
-        function($rootScope, $scope, $state,Session, User) {
+    .controller('SessionRegisterCtrl', ['$rootScope', '$scope', '$state', 'Session', 'User',
+        function($rootScope, $scope, $state, Session, User) {
             $scope.user = {};
             $scope.errors = null;
             $scope.save = function(){
-                User.store($scope.user).then(
+                User.post($scope.user).then(
                     function(data) {
                         if(data.success){
                            $rootScope.global.user = data.user;

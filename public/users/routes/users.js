@@ -20,10 +20,20 @@ angular.module('lama.users')
             templateUrl: 'users/views/account.html',
             resolve: {
                 user: function(User, $stateParams){
-                    return User.one($stateParams.id);
+                    return User.get($stateParams.id);
                 }
             },
             controller:'UserAccountCtrl'
+        })
+        .state('users.password', {
+            url: '/user/password/:id',
+            templateUrl: 'users/views/password.html',
+            resolve: {
+                user: function(User, $stateParams){
+                    return User.get($stateParams.id);
+                }
+            },
+            controller:'UserPasswordCtrl'
         })
             
     }]);

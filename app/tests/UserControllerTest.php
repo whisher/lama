@@ -17,9 +17,9 @@ class UserControllerTest extends TestCase {
         parent::tearDown();
     }
 
-   /* public function testUserControllerIndexAsGuest()
+    public function testUserControllerIndexAsGuest()
     {
         $response = $this->call('POST', URL::action('UserController@store'));
         $this->assertEquals('Hello World', $response->getContent());
-    }*/
+    }
 }

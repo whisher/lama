@@ -8,11 +8,11 @@
         <meta name="author" content="whisher">
         <link rel="shortcut icon" href="<% asset('favicon.ico');  %>">
         <title>Lama</title>
-        <link type="text/css" rel="stylesheet" href="<% asset('system/lib/bootstrap/dist/css/bootstrap.min.css');  %>">
+        <link type="text/css" rel="stylesheet" href="<% asset('bower_components/bootstrap/dist/css/bootstrap.min.css');  %>">
         <link type="text/css" rel="stylesheet" href="<% asset('system/assets/css/main.css'); %>">
         <!-- HTML5 shim for IE8 support of HTML5 elements -->
         <!--[if lt IE 9]>
-          <script src="<% asset('system/lib/html5shiv/dist/html5shiv.min.js');  %>"></script>
+          <script src="<% asset('bower_components/html5shiv/dist/html5shiv.min.js');  %>"></script>
         <![endif]-->
     </head>
     <body>
@@ -25,13 +25,13 @@
                 <p>Lama - &#169; 2014 All Rights Reserved</p>
             </div>
         </div>
-        <script src="<% asset('system/lib/lodash/dist/lodash.min.js');  %>"></script>
-        <script src="<% asset('system/lib/jquery/dist/jquery.min.js');  %>"></script>
-        <script src="<% asset('system/lib/bootstrap/dist/js/bootstrap.min.js'); %>"></script>
-        <script src="<% asset('system/lib/angular/angular.min.js'); %>"></script>
-        <script src="<% asset('system/lib/angular-ui-router/release/angular-ui-router.min.js'); %>"></script>
-        <script src="<% asset('system/lib/restangular/dist/restangular.min.js'); %>"></script>
-        <script src="<% asset('system/lib/restangular/dist/restangular.min.js'); %>"></script>
+        <script src="<% asset('bower_components/lodash/dist/lodash.min.js');  %>"></script>
+        <script src="<% asset('bower_components/jquery/dist/jquery.min.js');  %>"></script>
+        <script src="<% asset('bower_components/bootstrap/dist/js/bootstrap.min.js'); %>"></script>
+        <script src="<% asset('bower_components/angular/angular.min.js'); %>"></script>
+        <script src="<% asset('bower_components/angular-ui-router/release/angular-ui-router.min.js'); %>"></script>
+        <script src="<% asset('bower_components/restangular/dist/restangular.min.js'); %>"></script>
+        <script src="<% asset('bower_components/restangular/dist/restangular.min.js'); %>"></script>
         <!-- Init -->
         <script src="<% asset('init.js'); %>"></script>
         <!-- System -->

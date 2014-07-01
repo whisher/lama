@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('lama.users')
-    .controller('UserCtrl', ['$scope',
-        function($scope) {
-           
+    .controller('UserCtrl', ['$scope', 'Session', 'users',
+        function($scope, Session, users) {
+           $scope.hasUsers = users.length > 0;
+           $scope.users = users;
         }
     ])
     .controller('UserAccountCtrl', ['$rootScope', '$scope', '$state', 'user', 'User',

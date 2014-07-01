@@ -1,2 +1,29 @@
-<div data-ui-view></div>
+<table class="table table-striped" data-ng-if="hasUsers">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Fullname</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Joined</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr data-ng-repeat="user in users">
+            <td>{{user.title}}</td>
+            <td>{{user.fullname}}</td>
+            <td>{{user.username}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.created_at | date : 'shortDate'}}</td>
+            <td>
+                <a data-ui-sref="user_edit({ id: user.id })" class="btn btn-warning btn-sm">
+                    <span class="glyphicon glyphicon-edit"></span> Edit
+                </a>
+                <a data-ui-sref="user_delete({ id: user.id })" class="btn btn-danger btn-sm">
+                    <span class="glyphicon glyphicon-trash"></span> Delete
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
     

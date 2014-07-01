@@ -1,4 +1,5 @@
 <?php
+
 /* Check if a user is just logged */
 Route::filter('issessionedin', function()
 {
@@ -7,6 +8,7 @@ Route::filter('issessionedin', function()
     }
 });
 
+/* Check if a user is logged */
 Route::filter('isloggedin', function()
 {
     if (!Sentry::check()){
@@ -14,17 +16,52 @@ Route::filter('isloggedin', function()
     }
 });
 
-Route::filter('hasAuthAndIsOwner', function($route)
+/* Check if a user is the same of the current id */
+Route::filter('hasAccessAndIsOwner', function($route, $request, $value)
 {
     $check = Sentry::check();
     if (!$check){
         return Response::make('Unauthorized', 401);
     }
     if($check){
-        $id = $route->getParameter('id');
         $user = Sentry::getUser();
+        if (!$user->hasAccess($value)) {
+            return Response::make('Unauthorized', 401); 
+        }
+        $id = $route->getParameter('id');
         if($id !== $user->id){
            return Response::make('Unauthorized', 401); 
+        }
+    }
+});
+
+/* Check if a user has access */
+Route::filter('hasAccess', function($route, $request, $permission)
+{
+    $check = Sentry::check();
+    if (!$check){
+        return Response::make('Unauthorized', 401);
+    }
+    if($check){
+        $user = Sentry::getUser();
+        if (!$user->hasAccess($permission)) {
+            return Response::make('Unauthorized', 403); 
+        }
+    }
+});
+
+/* Check if a user session has access */
+Route::filter('hasAccessSession', function($route)
+{
+    $check = Sentry::check();
+    if (!$check){
+        return Response::make('Unauthorized', 401);
+    }
+    if($check){
+        $user = Sentry::getUser();
+        $permission = $route->getParameter('permission');
+        if (!$user->hasAccess($permission)) {
+            return Response::make('Unauthorized', 403); 
         }
     }
 });

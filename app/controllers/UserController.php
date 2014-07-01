@@ -31,8 +31,7 @@ class UserController extends Controller{
     public function index() 
     {
         $users = $this->user->all();
-        return Response::json(array(
-                    'data' => $users), 200
+        return Response::json($users, 200
         );
     }
 

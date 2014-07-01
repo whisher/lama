@@ -10,7 +10,10 @@ angular.module('lama.users')
                 },
                 isLoggedIn :function() {
                     $http.get('/isloggedin');
-                }   
+                },
+                hasAccess :function(permission) {
+                    $http.get('/hasaccess/'+permission);
+                }
             };
         }
     ]);

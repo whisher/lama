@@ -8,7 +8,7 @@ angular.module('lama.users')
         $stateProvider
         .state('users', {
             abstract: true,
-            templateUrl: 'users/views/index.html',
+            templateUrl: 'users/views/users.html',
             resolve: {
                 issessionedin: function(Session){
                     return Session.isLoggedIn();
@@ -35,5 +35,44 @@ angular.module('lama.users')
             },
             controller:'UserPasswordCtrl'
         })
+        .state('users_list', {
+            url: '/users',
+            templateUrl: 'users/views/index.html',
+            resolve: {
+                hasaccess: function(Session){
+                    return Session.hasAccess('users');
+                }, 
+                users: function(User){
+                   return User.getList();
+                }
+            },
+            controller:'UserCtrl'
+        })
+        .state('user_edit', {
+            url: '/users',
+            templateUrl: 'users/views/index.html',
+            resolve: {
+                hasaccess: function(Session){
+                    return Session.hasAccess('users');
+                }, 
+                users: function(User){
+                    return User.getList();
+                }
+            },
+            controller:'UserCtrl'
+        })
+        .state('user_delete', {
+            url: '/user/:id/delete',
+            templateUrl: 'users/views/delete.html',
+            resolve: {
+                hasaccess: function(Session){
+                    return Session.hasAccess('users');
+                }, 
+                users: function(User){
+                    return User.getList();
+                }
+            },
+            controller:'UserCtrl'
+        });
             
     }]);

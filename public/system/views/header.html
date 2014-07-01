@@ -16,6 +16,12 @@
                     <span>Home</span>  
                 </a>
             </li>
+            <li data-ng-class="{active: $state.includes('users_list')}">
+                <a data-ui-sref="users_list">
+                    <i class="glyphicon glyphicon-user"></i>
+                    <span>Users</span>  
+                </a>
+            </li>
         </ul>
         <ul class="nav navbar-nav navbar-right" data-ng-if="!global.authenticated">
             <li data-ng-class="{active: $state.includes('session.register')}"><a data-ui-sref="session.register">Register</a></li>

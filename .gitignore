@@ -4,7 +4,7 @@ nbproject/
 composer.phar
 composer.lock
 bootstrap/compiled.php
-public/system/lib
+public/bower_components
 app/config/local
 .env.*.php
 .env.php

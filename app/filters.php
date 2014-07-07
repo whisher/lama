@@ -26,11 +26,17 @@ Route::filter('hasAccessAndIsOwner', function($route, $request, $value)
     if($check){
         $user = Sentry::getUser();
         if (!$user->hasAccess($value)) {
-            return Response::make('Unauthorized', 401); 
+            return Response::make('Unauthorized', 403); 
         }
-        $id = $route->getParameter('id');
-        if($id !== $user->id){
-           return Response::make('Unauthorized', 401); 
+        $groups = array();
+        foreach($user->getGroups() as $group){
+            $groups[] = $group->name;
+        }
+        if(!in_array('Admins',$groups,true)){
+            $id = $route->getParameter('id');
+            if($id !== $user->id){
+               return Response::make('Unauthorized', 403); 
+            }
         }
     }
 });
@@ -70,14 +76,22 @@ Route::filter('xhr', function()
 {
     if(!Request::ajax()){
         return Response::make('Not Found', 404);
-    }
+    } 
+   
 });
 
 Route::filter('xsrf', function()
 {
-    if((!isset($_COOKIE['XSRF-TOKEN']) && is_null(Request::header('X-XSRF-TOKEN'))) || ($_COOKIE['XSRF-TOKEN'] !== Request::header('X-XSRF-TOKEN'))){
+    if((!isset($_COOKIE['XSRF-TOKEN']) || is_null(Request::header('X-XSRF-TOKEN'))) || ($_COOKIE['XSRF-TOKEN'] !== Request::header('X-XSRF-TOKEN'))){
         return Response::make('Not Found', 404);
     }
 });
 
-
+//To protect against json injection
+App::after(function($request, $response)
+{
+    if($response instanceof \Illuminate\Http\JsonResponse) {
+        $json = ")]}',\n" . $response->getContent();
+        return $response->setContent($json);
+    }
+});

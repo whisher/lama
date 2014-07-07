@@ -78,7 +78,7 @@ return array(
 	|
 	*/
 
-	'key' => 'N8WBoOLqHINDQhL5QdMPhUe9kbaFZaJu',
+	'key' => 'GPWlKkVnRO61p6TU5JGko1zfxybgXdlA',
 
 	'cipher' => MCRYPT_RIJNDAEL_128,
 
@@ -124,6 +124,7 @@ return array(
                 'Cartalyst\Sentry\SentryServiceProvider',
                 'Users\UserServiceProvider',
                 'Users\FormServiceProvider',
+                'Users\ValidationServiceProvider' 
 
 	),
 

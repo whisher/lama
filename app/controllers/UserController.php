@@ -24,7 +24,7 @@ class UserController extends Controller{
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a list of users.
      *
      * @return json
      */
@@ -35,17 +35,18 @@ class UserController extends Controller{
         );
     }
 
+    
     /**
-     * Store a newly created user.
+     * Register an user.
      *
      * @return json
      */
-    public function store() 
+    public function register() 
     {
         $isValid = $this->registerForm->valid(Input::only('fullname','email','username','password','password_confirmation'));
         if($isValid){
-            $result = $this->user->store($this->registerForm->data());
-            if (isset($result['user']) && $result['success']) {
+            $result = $this->user->register($this->registerForm->data());
+            if (isset($result['user']) && ($result['success'] > 0)) {
                 Event::fire('user.register', $result['user']);
                 return Response::json($result,200);
             } 
@@ -63,10 +64,36 @@ class UserController extends Controller{
     }
 
     /**
+     * Create an user.
+     *
+     * @return json
+     */
+    public function create() 
+    {
+       $isValid = $this->updateForm->valid(Input::only('fullname','email','username','password','password_confirmation','groups'));
+       if($isValid){
+            $result = $this->user->create($this->updateForm->data());
+            if (isset($result['user']) && ($result['success'] > 0)) {
+                return Response::json($result,200);
+            } 
+            $error = isset($result['error'])?array_pop($result):trans('user.generror');
+            return Response::json(array(
+              'success'=>0,
+              'errors' => array('error'=>array($error))),  
+            200);
+        }
+        return Response::json(array(
+                'success'=>0,
+                'errors' => $this->updateForm->errors()),
+                200
+        );
+    }
+    
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return Response
+     * @return json
      */
     public function show($id) 
     {
@@ -89,7 +116,7 @@ class UserController extends Controller{
         $isValid = $this->updateForm->valid(Input::only('fullname', 'email', 'username'));
         if ($isValid) {
             $result = $this->user->account($id,$this->updateForm->data());
-            if (isset($result['user']) && $result['success']) {
+            if (isset($result['user']) && ($result['success'] > 0)) {
                 return Response::json($result,200);
             } 
             $error = isset($result['error'])?array_pop($result):trans('user.generror');
@@ -116,7 +143,7 @@ class UserController extends Controller{
         $isValid = $this->updateForm->valid(Input::only('old_password' ,'password','password_confirmation'));
         if ($isValid) {
             $result = $this->user->password($id,$this->updateForm->data());
-            if (isset($result['user']) && $result['success']) {
+            if (isset($result['user']) && ($result['success'] > 0)) {
                 return Response::json($result,200);
             } 
             $error = isset($result['error'])?array_pop($result):trans('user.generror');
@@ -138,315 +165,59 @@ class UserController extends Controller{
      * @param  int  $id
      * @return json
      */
-    public function update($id) 
+    public function edit($id) 
     {
-        $action = Input::get('action');
-        if (empty($action) || !in_array($action, array('account'))) {
-            return Response::make('Not Found', 404);
-        }
-        if ($action === 'account') {
-            $isValid = $this->updateForm->valid(Input::only('id','fullname', 'email', 'username'));
-            if($isValid){
-                $result = $this->user->account($this->updateForm->data());
-                dd($result);
-                if (isset($result['user']) && $result['success']) {
-                    Event::fire('user.register', $result['user']);
-                    return Response::json($result,200);
-                } 
-                $error = isset($result['error'])?array_pop($result):trans('user.generror');
-                return Response::json(array(
-                  'success'=>0,
-                  'errors' => array('error'=>array($error))),  
-                200);
-            }
+        $isValid = $this->updateForm->valid(Input::only('fullname', 'email', 'username','groups'));
+        if ($isValid) {
+            $result = $this->user->edit($id,$this->updateForm->data());
+            if (isset($result['user']) && ($result['success'] > 0)) {
+                return Response::json($result,200);
+            } 
+            $error = isset($result['error'])?array_pop($result):trans('user.generror');
             return Response::json(array(
-                'success'=>0,
-                'errors' => $this->updateForm->errors()),
-                200
-            );
+              'success'=>0,
+              'errors' => array('error'=>array($error))),  
+            200);
         }
+        return Response::json(array(
+                    'success' => 0,
+                    'errors' => $this->updateForm->errors()), 
+                    200
+        );
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    /*public function update($id) {
-        if (!is_numeric($id)) {
-            // @codeCoverageIgnoreStart
-            return \App::abort(404);
-            // @codeCoverageIgnoreEnd
+    public function suspend($id) 
+    {
+        $isValid = $this->updateForm->valid(Input::only('minutes'));
+        if ($isValid) {
+            $result = $this->user->suspend($id,$this->updateForm->data());
+            if ($result['success'] > 0) {
+                return Response::json($result,200);
+            } 
+            $error = isset($result['error'])?array_pop($result):trans('user.generror');
+            return Response::json(array(
+              'success'=>0,
+              'errors' => array('error'=>array($error))),  
+            200);
         }
-
-        // Form Processing
-        $result = $this->userForm->update(Input::all());
-
-        if ($result['success']) {
-            // Success!
-            Session::flash('success', $result['message']);
-            return Redirect::action('UserController@show', array($id));
-        } else {
-            Session::flash('error', $result['message']);
-            return Redirect::action('UserController@edit', array($id))
-                            ->withInput()
-                            ->withErrors($this->userForm->errors());
-        }
-    }*/
-
+        return Response::json(array(
+                    'success' => 0,
+                    'errors' => $this->updateForm->errors()), 
+                    200
+        );
+    }
     /**
-     * Remove the specified resource from storage.
+     * Remove the user.
      *
      * @param  int  $id
      * @return Response
      */
     public function destroy($id) {
-        if (!is_numeric($id)) {
-            // @codeCoverageIgnoreStart
-            return \App::abort(404);
-            // @codeCoverageIgnoreEnd
-        }
-
         if ($this->user->destroy($id)) {
-            Session::flash('success', 'User Deleted');
-            return Redirect::to('/users');
-        } else {
-            Session::flash('error', 'Unable to Delete User');
-            return Redirect::to('/users');
-        }
+             return Response::make('OK', 200); 
+        } 
+        return Response::make('Internal Server Error', 500); 
     }
 
-    /**
-     * Activate a new user
-     * @param  int $id   
-     * @param  string $code 
-     * @return Response
-     */
-    public function activate($id, $code) {
-        if (!is_numeric($id)) {
-            // @codeCoverageIgnoreStart
-            return \App::abort(404);
-            // @codeCoverageIgnoreEnd
-        }
-
-        $result = $this->user->activate($id, $code);
-
-        if ($result['success']) {
-            // Success!
-            Session::flash('success', $result['message']);
-            return Redirect::route('home');
-        } else {
-            Session::flash('error', $result['message']);
-            return Redirect::route('home');
-        }
-    }
-
-    /**
-     * Process resend activation request
-     * @return Response
-     */
-    public function resend() {
-        // Form Processing
-        $result = $this->resendActivationForm->resend(Input::all());
-
-        if ($result['success']) {
-            Event::fire('user.resend', array(
-                'email' => $result['mailData']['email'],
-                'userId' => $result['mailData']['userId'],
-                'activationCode' => $result['mailData']['activationCode']
-            ));
-
-            // Success!
-            Session::flash('success', $result['message']);
-            return Redirect::route('home');
-        } else {
-            Session::flash('error', $result['message']);
-            return Redirect::route('profile')
-                            ->withInput()
-                            ->withErrors($this->resendActivationForm->errors());
-        }
-    }
-
-    /**
-     * Process Forgot Password request
-     * @return Response
-     */
-    public function forgot() {
-        // Form Processing
-        $result = $this->forgotPasswordForm->forgot(Input::all());
-
-        if ($result['success']) {
-            Event::fire('user.forgot', array(
-                'email' => $result['mailData']['email'],
-                'userId' => $result['mailData']['userId'],
-                'resetCode' => $result['mailData']['resetCode']
-            ));
-
-            // Success!
-            Session::flash('success', $result['message']);
-            return Redirect::route('home');
-        } else {
-            Session::flash('error', $result['message']);
-            return Redirect::route('forgotPasswordForm')
-                            ->withInput()
-                            ->withErrors($this->forgotPasswordForm->errors());
-        }
-    }
-
-    /**
-     * Process a password reset request link
-     * @param  [type] $id   [description]
-     * @param  [type] $code [description]
-     * @return [type]       [description]
-     */
-    public function reset($id, $code) {
-        if (!is_numeric($id)) {
-            // @codeCoverageIgnoreStart
-            return \App::abort(404);
-            // @codeCoverageIgnoreEnd
-        }
-
-        $result = $this->user->resetPassword($id, $code);
-
-        if ($result['success']) {
-            Event::fire('user.newpassword', array(
-                'email' => $result['mailData']['email'],
-                'newPassword' => $result['mailData']['newPassword']
-            ));
-
-            // Success!
-            Session::flash('success', $result['message']);
-            return Redirect::route('home');
-        } else {
-            Session::flash('error', $result['message']);
-            return Redirect::route('home');
-        }
-    }
-
-    /**
-     * Process a password change request
-     * @param  int $id 
-     * @return redirect     
-     */
-    public function change($id) {
-        if (!is_numeric($id)) {
-            // @codeCoverageIgnoreStart
-            return \App::abort(404);
-            // @codeCoverageIgnoreEnd
-        }
-
-        $data = Input::all();
-        $data['id'] = $id;
-
-        // Form Processing
-        $result = $this->changePasswordForm->change($data);
-
-        if ($result['success']) {
-            // Success!
-            Session::flash('success', $result['message']);
-            return Redirect::route('home');
-        } else {
-            Session::flash('error', $result['message']);
-            return Redirect::action('UserController@edit', array($id))
-                            ->withInput()
-                            ->withErrors($this->changePasswordForm->errors());
-        }
-    }
-
-    /**
-     * Process a suspend user request
-     * @param  int $id 
-     * @return Redirect     
-     */
-    public function suspend($id) {
-        if (!is_numeric($id)) {
-            // @codeCoverageIgnoreStart
-            return \App::abort(404);
-            // @codeCoverageIgnoreEnd
-        }
-
-        // Form Processing
-        $result = $this->suspendUserForm->suspend(Input::all());
-
-        if ($result['success']) {
-            // Success!
-            Session::flash('success', $result['message']);
-            return Redirect::to('users');
-        } else {
-            Session::flash('error', $result['message']);
-            return Redirect::action('UserController@suspend', array($id))
-                            ->withInput()
-                            ->withErrors($this->suspendUserForm->errors());
-        }
-    }
-
-    /**
-     * Unsuspend user
-     * @param  int $id 
-     * @return Redirect     
-     */
-    public function unsuspend($id) {
-        if (!is_numeric($id)) {
-            // @codeCoverageIgnoreStart
-            return \App::abort(404);
-            // @codeCoverageIgnoreEnd
-        }
-
-        $result = $this->user->unSuspend($id);
-
-        if ($result['success']) {
-            // Success!
-            Session::flash('success', $result['message']);
-            return Redirect::to('users');
-        } else {
-            Session::flash('error', $result['message']);
-            return Redirect::to('users');
-        }
-    }
-
-    /**
-     * Ban a user
-     * @param  int $id 
-     * @return Redirect     
-     */
-    public function ban($id) {
-        if (!is_numeric($id)) {
-            // @codeCoverageIgnoreStart
-            return \App::abort(404);
-            // @codeCoverageIgnoreEnd
-        }
-
-        $result = $this->user->ban($id);
-
-        if ($result['success']) {
-            // Success!
-            Session::flash('success', $result['message']);
-            return Redirect::to('users');
-        } else {
-            Session::flash('error', $result['message']);
-            return Redirect::to('users');
-        }
-    }
-
-    public function unban($id) {
-        if (!is_numeric($id)) {
-            // @codeCoverageIgnoreStart
-            return \App::abort(404);
-            // @codeCoverageIgnoreEnd
-        }
-
-        $result = $this->user->unBan($id);
-
-        if ($result['success']) {
-            // Success!
-            Session::flash('success', $result['message']);
-            return Redirect::to('users');
-        } else {
-            Session::flash('error', $result['message']);
-            return Redirect::to('users');
-        }
-    }
-
-}
+ }
 

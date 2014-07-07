@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('lama.users')
-    .controller('SessionSigninCtrl', ['$scope', '$rootScope', '$http', '$state','Session',
-        function($scope, $rootScope, $http, $state,Session) {
+    .controller('SessionSigninCtrl', ['$scope', '$rootScope', '$http', '$state',
+        function($scope, $rootScope, $http, $state) {
             $scope.user = {};
             $scope.error = null;
            
@@ -21,8 +21,8 @@ angular.module('lama.users')
             };
         }
     ])
-    .controller('SessionRegisterCtrl', ['$rootScope', '$scope', '$state', 'Session', 'User',
-        function($rootScope, $scope, $state, Session, User) {
+    .controller('SessionRegisterCtrl', ['$rootScope', '$scope', '$state', 'User',
+        function($rootScope, $scope, $state, User) {
             $scope.user = {};
             $scope.errors = null;
             $scope.save = function(){

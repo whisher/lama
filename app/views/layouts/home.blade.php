@@ -9,7 +9,8 @@
         <link rel="shortcut icon" href="<% asset('favicon.ico');  %>">
         <title>Lama</title>
         <link type="text/css" rel="stylesheet" href="<% asset('bower_components/bootstrap/dist/css/bootstrap.min.css');  %>">
-        <link type="text/css" rel="stylesheet" href="<% asset('system/assets/css/main.css'); %>">
+        <link type="text/css" rel="stylesheet" href="<% asset('system/assets/css/system.css'); %>">
+        <link type="text/css" rel="stylesheet" href="<% asset('users/assets/css/users.css'); %>">
         <!-- HTML5 shim for IE8 support of HTML5 elements -->
         <!--[if lt IE 9]>
           <script src="<% asset('bower_components/html5shiv/dist/html5shiv.min.js');  %>"></script>

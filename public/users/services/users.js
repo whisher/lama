@@ -13,6 +13,19 @@ angular.module('lama.users')
             this.password = function(id){
                 return this.one(id).one('password');
             };
+            this.register = function(data){
+                return this.all('user/create').post(data);
+            };
+            this.edit = function(id){
+                return this.one(id).one('edit');
+            };
+            this.suspend = function(id){
+                return this.one(id).one('suspend');
+            };
         }
         return angular.extend(Restify('user'), new User());
+    }])
+   .factory('Group', ['Restify', function(Restify) {
+        function Group() {}
+        return angular.extend(Restify('group'), new Group());
     }]);

@@ -2,42 +2,60 @@
 
  interface UserInterface {
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return json
+     /**
+     * Register an user.
+     * 
+     * @param  array  $data
+     * 
+     * @return array
      */
-    public function store($data);
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return json
-     */
-    public function update($id,$data);
+    public function create($data);
     
     /**
-     * Update the specified resource in storage.
+     * Register an user.
+     * 
+     * @param  array  $data
+     * 
+     * @return array
+     */
+    public function register($data);
+
+    /**
+     * Update the user account.
      *
      * @param  int  $id
-     * @return json
+     * @param  array  $data
+     * 
+     * @return Array
+     */
+    public function edit($id,$data);
+    
+    /**
+     * Update the user account.
+     *
+     * @param  int  $id
+     * @param  array  $data
+     * 
+     * @return Array
      */
     public function account($id,$data);
     
     /**
-     * Update the specified resource in storage.
+     * Update the user password.
      *
      * @param  int  $id
-     * @return json
+     * @param  array  $data
+     * 
+     * @return Array
      */
     public function password($id,$data);
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the user.
      *
      * @param  int  $id
-     * @return json
+     * 
+     * @return Boolean
      */
     public function destroy($id);
 
@@ -45,6 +63,7 @@
      * Return a specific user from the given id
      * 
      * @param  integer $id
+     * 
      * @return User
      */
     public function byId($id);

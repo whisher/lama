@@ -4,6 +4,7 @@ use Illuminate\Support\ServiceProvider;
 use Cartalyst\Sentry\Sentry;
 use Users\Session\SentrySession;
 use Users\User\SentryUser;
+use Users\Group\SentryGroup;
 
 class UserServiceProvider extends ServiceProvider {
 
@@ -22,6 +23,14 @@ class UserServiceProvider extends ServiceProvider {
                                     $app['sentry']
                     );
                 });
+        
+        $app->bind('Users\Group\GroupInterface', function($app)
+        {
+            return new SentryGroup(
+                $app['sentry']
+            );
+        });
+	
     }
 
 }

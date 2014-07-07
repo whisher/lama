@@ -19,11 +19,62 @@ class SentryUser implements UserInterface {
     }
 
     /**
-     * Store a newly created resource in storage.
+     *  Create an user.
      *
-     * @return Response
+     * @return Array
      */
-    public function store($data) 
+    public function create($data) 
+    {
+        $result = array('success' => 0);
+        try {
+            //Attempt to register the user. 
+            $user = $this->sentry->createUser(
+                    array(
+                'email' => e($data['email']),
+                'password' => e($data['password']),
+                'fullname' => e($data['fullname']),
+                'username' => e($data['username']),
+                'activated'=>true));
+            //success!
+            $result['success'] = 1;
+            $groups = array();
+            foreach($data['groups'] as $groupId){
+                $userGroup = $this->sentry->getGroupProvider()->findById($groupId);
+                // Assign the groups to the users
+                $user->addGroup($userGroup);
+                $groups[] = $userGroup->name;
+            }
+            
+            $result['user'] = array(
+                'id' => $user->getId(),
+                'email' => $user->getEmail(),
+                'fullname' => $user->getFullname(),
+                'username' => $user->getUsername(),
+                'groups' => $groups);
+        } 
+        catch (Cartalyst\Sentry\Users\LoginRequiredException $e) {
+             $result['error'] = trans('user.loginreq');
+        } catch (Cartalyst\Sentry\Users\PasswordRequiredException $e) {
+             $result['error'] = trans('user.passwordreq');;
+        } catch (Cartalyst\Sentry\Users\UserExistsException $e) {
+            $result['error'] = trans('user.exists');
+        } catch (Cartalyst\Sentry\Groups\GroupNotFoundException $e) {
+            $result['error'] = trans('user.notfoundgroup');
+        }
+        catch (\Illuminate\Database\QueryException $e) {
+            $result['error'] = trans('user.querror');
+        } catch (\Exception $e) {
+            $result['error'] = trans('user.generror');
+        }
+        return $result;
+    }
+    
+    /**
+     *  Register an user.
+     *
+     * @return Array
+     */
+    public function register($data) 
     {
         $result = array('success' => 0);
         try {
@@ -68,6 +119,63 @@ class SentryUser implements UserInterface {
     }
 
     /**
+     * Update user.
+     *
+     * @return Array
+     */
+    public function edit($id,$data) 
+    {
+        $result = array('success' => 0);
+        try { 
+            $user = $this->sentry->findUserById($id);
+            $fullname = e($data['fullname']);
+            $email = e($data['email']);
+            $username = e($data['username']);
+            if($username !== $user->username ){
+                $user->username = $username;
+            }
+            if($email !== $user->email ){
+                $user->email = $email;
+            }
+            $user->fullname = $fullname;
+            $user->save();
+            
+            $groups = $user->getGroups();
+           
+            foreach($groups as $group){
+                $user->removeGroup($group);
+            }
+            
+            foreach($data['groups'] as $key => $value){
+                $userGroup = $this->sentry->getGroupProvider()->findById($key);
+                $user->addGroup($userGroup);
+                $groups[] = $userGroup->name;
+            }
+           
+            $result['success'] = 1;
+            $result['user'] = array(
+                'id' => $user->getId(),
+                'email' => $user->email,
+                'fullname' => $user->fullname,
+                'username' => $user->username,
+                'groups'=>$groups
+            );
+            
+        } catch (\Cartalyst\Sentry\Users\UserExistsException $e) {
+            $result['error'] = trans('user.exists');
+        } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
+            $result['error'] = trans('user.notfound');
+        } catch (Cartalyst\Sentry\Groups\GroupNotFoundException $e) {
+            $result['error'] = trans('user.notfoundgroup');
+        }catch (\Illuminate\Database\QueryException $e) {
+            $result['error'] = trans('user.exists');
+        }catch (\Exception $e) {
+            $result['error'] = trans('user.generror');
+        }
+        return $result;
+    }
+    
+    /**
      * Update account.
      *
      * @return Array
@@ -109,7 +217,7 @@ class SentryUser implements UserInterface {
     }
     
     /**
-     * Update account.
+     * Update password.
      *
      * @return Array
      */
@@ -147,87 +255,41 @@ class SentryUser implements UserInterface {
         return $result;
     }
     
+    
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  array $data
-     * @return Response
+     * Suspend a user
+     * @param  int $id      
+     * @param  int $minutes 
+     * @return Array          
      */
-    public function update($id,$data) {
-        $result = array();
+    public function suspend($id, $data) {
+        $result = array('success' => 0);
         try {
             // Find the user using the user id
-            $user = $this->sentry->findUserById($data['id']);
-
-            // Update the user details
-            $user->first_name = e($data['firstName']);
-            $user->last_name = e($data['lastName']);
-
-            // Only Admins should be able to change group memberships. 
-            $operator = $this->sentry->getUser();
-            if ($operator->hasAccess('admin')) {
-                // Update group memberships
-                $allGroups = $this->sentry->getGroupProvider()->findAll();
-                foreach ($allGroups as $group) {
-                    if (isset($data['groups'][$group->id])) {
-                        //The user should be added to this group
-                        $user->addGroup($group);
-                    } else {
-                        // The user should be removed from this group
-                        $user->removeGroup($group);
-                    }
-                }
-            }
-
-            // Update the user
-            if ($user->save()) {
-                // User information was updated
-                $result['success'] = true;
-                $result['message'] = trans('users.updated');
-            } else {
-                // User information was not updated
-                $result['success'] = false;
-                $result['message'] = trans('users.notupdated');
-            }
-        } catch (\Cartalyst\Sentry\Users\UserExistsException $e) {
-            $result['success'] = false;
-            $result['message'] = trans('users.exists');
+            $throttle = $this->sentry->findThrottlerByUserId($id);
+            //Set suspension time
+            $throttle->setSuspensionTime($data['minutes']);
+            // Suspend the user
+            $throttle->suspend();
+            $result['success'] = 1;
+           
         } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
-            $result['success'] = false;
             $result['message'] = trans('users.notfound');
         }
-
         return $result;
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy($id) {
-        try {
-            // Find the user using the user id
-            $user = $this->sentry->findUserById($id);
-
-            // Delete the user
-            $user->delete();
-        } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
-            return false;
-        }
-        return true;
     }
 
     /**
      * Return a specific user from the given id
      * 
      * @param  integer $id
+     * 
      * @return User
      */
     public function byId($id) {
         try {
             $user = $this->sentry->findUserById($id);
+            $user->groups = $user->getGroups();
         } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
             return false;
         }
@@ -239,33 +301,54 @@ class SentryUser implements UserInterface {
      *
      * @return stdObject Collection of users
      */
-    public function all() {
+    public function all() 
+    {
         $users = $this->sentry->findAllUsers();
-
         foreach ($users as $user) {
+            
             if ($user->isActivated()) {
-                $user->status = "Active";
+                $user->active = true;
+                $user->status = trans('user.active');
             } else {
-                $user->status = "Not Active";
+                $user->active = false;
+                $user->status = trans('user.noactive');
             }
-
             //Pull Suspension & Ban info for this user
             $throttle = $this->throttleProvider->findByUserId($user->id);
-
             //Check for suspension
             if ($throttle->isSuspended()) {
                 // User is Suspended
-                $user->status = "Suspended";
+                $user->active = false;
+                $user->status = trans('user.noactive');
             }
-
             //Check for ban
             if ($throttle->isBanned()) {
                 // User is Banned
-                $user->status = "Banned";
+                $user->active = false;
+                $user->status = trans('user.banned');
             }
+            $user->groups = $user->getGroups();
         }
-
         return $users;
+    }
+    
+    /**
+     * Remove an user.
+     *
+     * @param  int  $id
+     * 
+     * @return Boolean
+     */
+    public function destroy($id) {
+        try {
+            // Find the user using the user id
+            $user = $this->sentry->findUserById($id);
+            // Delete the user
+            $user->delete();
+        } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
+            return false;
+        }
+        return true;
     }
 
 }

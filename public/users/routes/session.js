@@ -21,7 +21,7 @@ angular.module('lama.users')
              })
             .state('session.register', {
                 url: '/user/register',
-                templateUrl: 'users/views/form.html',
+                templateUrl: 'users/views/register.html',
                 controller:'SessionRegisterCtrl'
             });
         }

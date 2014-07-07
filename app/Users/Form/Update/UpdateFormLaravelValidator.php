@@ -15,7 +15,9 @@ class UpdateFormLaravelValidator extends AbstractLaravelValidator {
         'email' => 'sometimes|required|email',
         'username' => 'sometimes|required|min:3|max:15',
         'password' => 'sometimes|required|min:5|max:15|confirmed',
-        'password_confirmation' => 'sometimes|required|min:5|max:15'
+        'password_confirmation' => 'sometimes|required|min:5|max:15',
+        'groups' => 'sometimes|required|groups',
+        'minutes' => 'sometimes|required|numeric'
     );
 
 }

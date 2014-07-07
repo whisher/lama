@@ -1,3 +1,6 @@
+<div class="well">
+    <a class="btn btn-primary" data-ui-sref="user_actions.create">New</a>
+</div>
 <table class="table table-striped" data-ng-if="hasUsers">
     <thead>
         <tr>
@@ -5,21 +8,37 @@
             <th>Fullname</th>
             <th>Username</th>
             <th>Email</th>
+            <th>Status</th>
             <th>Joined</th>
+            <th>Groups</th>
         </tr>
     </thead>
     <tbody>
         <tr data-ng-repeat="user in users">
-            <td>{{user.title}}</td>
+            <td>{{user.id}}</td>
             <td>{{user.fullname}}</td>
             <td>{{user.username}}</td>
             <td>{{user.email}}</td>
+            <td>{{user.status}}</td>
             <td>{{user.created_at | date : 'shortDate'}}</td>
             <td>
-                <a data-ui-sref="user_edit({ id: user.id })" class="btn btn-warning btn-sm">
+                <ul class="groups">
+                    <li data-ng-repeat="group in user.groups">
+                        {{group.name}}
+                    </li>
+                </ul>
+            </td>
+            <td>
+                <a data-ng-if="user.active" data-ui-sref="user_actions.suspend({ id: user.id })" class="btn btn-warning btn-sm">
+                    <span class="glyphicon glyphicon-warning-sign"></span> Suspend
+                </a>
+                <a data-ng-if="!user.active" data-ui-sref="user_actions.unsuspend({ id: user.id })" class="btn btn-warning btn-sm">
+                    <span class="glyphicon glyphicon-warning-sign"></span> Un-Suspend
+                </a>
+                <a data-ui-sref="user_actions.edit({ id: user.id })" class="btn btn-warning btn-sm">
                     <span class="glyphicon glyphicon-edit"></span> Edit
                 </a>
-                <a data-ui-sref="user_delete({ id: user.id })" class="btn btn-danger btn-sm">
+                <a data-ui-sref="user_actions.delete({ id: user.id })" class="btn btn-danger btn-sm">
                     <span class="glyphicon glyphicon-trash"></span> Delete
                 </a>
             </td>

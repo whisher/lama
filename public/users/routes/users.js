@@ -35,44 +35,68 @@ angular.module('lama.users')
             },
             controller:'UserPasswordCtrl'
         })
-        .state('users_list', {
-            url: '/users',
-            templateUrl: 'users/views/index.html',
+        .state('user_actions', {
+            abstract: true,
+            templateUrl: 'users/views/actions.html',
             resolve: {
                 hasaccess: function(Session){
                     return Session.hasAccess('users');
-                }, 
+                } 
+            },
+            controller:'UserParentActionsCtrl'
+        })
+        .state('user_actions.create', {
+            url: '/user/create',
+            templateUrl: 'users/views/create.html',
+            resolve: {
+                groups: function(Group){
+                   return Group.getList();
+                }
+            },
+            controller:'UserCreateCtrl'
+        })
+        .state('user_actions.list', {
+            url: '/users',
+            templateUrl: 'users/views/index.html',
+            resolve: {
                 users: function(User){
                    return User.getList();
                 }
             },
             controller:'UserCtrl'
         })
-        .state('user_edit', {
-            url: '/users',
-            templateUrl: 'users/views/index.html',
+        .state('user_actions.suspend', {
+            url: '/user/:id/suspend',
+            templateUrl: 'users/views/suspend.html',
             resolve: {
-                hasaccess: function(Session){
-                    return Session.hasAccess('users');
-                }, 
-                users: function(User){
-                    return User.getList();
+                user: function(User,$stateParams){
+                    return User.get($stateParams.id);
                 }
             },
-            controller:'UserCtrl'
+            controller:'UserSuspendCtrl'
         })
-        .state('user_delete', {
+        .state('user_actions.edit', {
+            url: '/user/:id/edit',
+            templateUrl: 'users/views/edit.html',
+            resolve: {
+                groups: function(Group){
+                   return Group.getList();
+                },
+                user: function(User,$stateParams){
+                    return User.get($stateParams.id);
+                }
+            },
+            controller:'UserEditCtrl'
+        })
+        .state('user_actions.delete', {
             url: '/user/:id/delete',
             templateUrl: 'users/views/delete.html',
             resolve: {
-                hasaccess: function(Session){
-                    return Session.hasAccess('users');
-                }, 
-                users: function(User){
-                    return User.getList();
+                user: function(User,$stateParams){
+                    return User.get($stateParams.id);
                 }
             },
-            controller:'UserCtrl'
+            controller:'UserDeleteCtrl'
         });
             
     }]);

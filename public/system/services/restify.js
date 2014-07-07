@@ -17,6 +17,9 @@ angular.module('lama.system')
                 copy : function(original) {
                     return Restangular.copy(original);
                 },
+                all : function(route) {
+                    return Restangular.all(route);
+                },
                 one : function(id) {
                     return Restangular.one(route, id);
                 },

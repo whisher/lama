@@ -9,7 +9,7 @@ angular.module('lama.system')
             .state('home', {
                 url: '/',
                 templateUrl: 'system/views/home.html'
-            })
+            });
         }
     ])
     .config(['$locationProvider',

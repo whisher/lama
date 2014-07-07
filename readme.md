@@ -2,7 +2,6 @@
 LAMA is a boilerplate that provides a nice starting point for Laravel and AngularJS based applications.
 
 ## Credits
-[Using Laravel 4 with Sentry 2](https://github.com/rydurham/L4withSentry)
 [MEAN fullstack javascript framework](http://mean.io)
 
 ### Tools Prerequisites

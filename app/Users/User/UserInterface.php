@@ -74,4 +74,42 @@
      * @return stdObject Collection of users
      */
     public function all();
+    
+    /**
+     * Suspend a user
+     * 
+     * @param  int $id      
+     * @param  array $data
+     * 
+     * @return Array          
+     */
+    public function suspend($id, $data);
+    
+    /**
+     * Remove a users' suspension.
+     * 
+     * @param  int $id 
+     * 
+     * @return Array
+     */
+    public function unSuspend($id);
+    
+    /**
+     * Ban an user
+     * 
+     * @param  int $id 
+     * 
+     * @return Array     
+     */
+    public function ban($id);
+    
+    /**
+     * Un-Ban an user
+     * 
+     * @param  int $id 
+     * 
+     * @return Array     
+     */
+    public function unBan($id);
+    
 }

@@ -13,5 +13,7 @@ return array(
     'active'=>'Active',
     'noactive'=>'Not Active',
     'suspended'=>'Suspended',
-    "banned"=>"Banned"
+    'unsuspended'=>'Un-Suspended',
+    'banned'=>'Banned',
+    'unbanned'=>'Un-Banned'
 );

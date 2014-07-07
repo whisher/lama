@@ -93,6 +93,7 @@ class UserController extends Controller{
      * Display the specified resource.
      *
      * @param  int  $id
+     * 
      * @return json
      */
     public function show($id) 
@@ -109,6 +110,7 @@ class UserController extends Controller{
      * Update the user.
      *
      * @param  int  $id
+     * 
      * @return json
      */
     public function account($id) 
@@ -136,6 +138,7 @@ class UserController extends Controller{
      * Update the user.
      *
      * @param  int  $id
+     * 
      * @return json
      */
     public function password($id) 
@@ -163,6 +166,7 @@ class UserController extends Controller{
      * Update the user.
      *
      * @param  int  $id
+     * 
      * @return json
      */
     public function edit($id) 
@@ -186,6 +190,13 @@ class UserController extends Controller{
         );
     }
 
+    /**
+     * Suspend user
+     * 
+     * @param  int $id 
+     * 
+     * @return json     
+     */
     public function suspend($id) 
     {
         $isValid = $this->updateForm->valid(Input::only('minutes'));
@@ -206,10 +217,53 @@ class UserController extends Controller{
                     200
         );
     }
+    
+    /**
+     * Unsuspend user
+     * 
+     * @param  int $id 
+     * 
+     * @return json     
+     */
+    public function unsuspend($id) 
+    {
+        $result = $this->user->unSuspend($id);
+        if ($result['success'] > 0) {
+            return Response::json($result,200);
+        } 
+        return Response::make('Not Found', 404);
+    }
+    
+    /**
+     * Ban a user
+     * 
+     * @param  int $id 
+     * 
+     * @return Redirect     
+     */
+    public function ban($id) 
+    {
+        $result = $this->user->ban($id);
+        if ($result['success'] > 0) {
+            return Response::json($result,200);
+        } 
+        return Response::make('Not Found', 404);
+    }
+
+    public function unban($id) 
+    {
+        $result = $this->user->unBan($id);
+        if ($result['success'] > 0) {
+            return Response::json($result,200);
+        } 
+        return Response::make('Not Found', 404);
+    }
+
     /**
      * Remove the user.
      *
      * @param  int  $id
+     * 
      * @return Response
      */
     public function destroy($id) {

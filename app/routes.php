@@ -20,7 +20,9 @@ Route::put('user/{id}/account', array('as' => 'base.user.account', 'uses' => 'Ap
 Route::put('user/{id}/password', array('as' => 'base.user.password', 'uses' => 'App\Controllers\UserController@password'))->where('id', '[0-9]+')->before('xhr|xsrf|hasAccessAndIsOwner:users.password');
 Route::put('user/{id}/edit', array('as' => 'base.user.edit', 'uses' => 'App\Controllers\UserController@edit'))->where('id', '[0-9]+')->before('xhr|xsrf|hasAccess:users');
 Route::put('user/{id}/suspend', array('as' => 'base.user.suspend', 'uses' => 'App\Controllers\UserController@suspend'))->where('id', '[0-9]+')->before('xhr|xsrf|hasAccess:users');
-
+Route::put('user/{id}/unsuspend', array('as' => 'base.user.unsuspend', 'uses' => 'App\Controllers\UserController@unsuspend'))->where('id', '[0-9]+')->before('xhr|xsrf|hasAccess:users');
+Route::put('user/{id}/ban', array('as' => 'base.user.ban', 'uses' => 'App\Controllers\UserController@ban'))->where('id', '[0-9]+')->before('xhr|xsrf|hasAccess:users');
+Route::put('user/{id}/unban', array('as' => 'base.user.unban', 'uses' => 'App\Controllers\UserController@unban'))->where('id', '[0-9]+')->before('xhr|xsrf|hasAccess:users');
 Route::delete('user/{id}', array('as' => 'base.user.destroy', 'uses' => 'App\Controllers\UserController@destroy'))->where('id', '[0-9]+')->before('hasAccess:users');
 
 /* Session */

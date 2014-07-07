@@ -20,7 +20,9 @@ class SentryUser implements UserInterface {
 
     /**
      *  Create an user.
-     *
+     * 
+     * @param  array $data
+     * 
      * @return Array
      */
     public function create($data) 
@@ -71,7 +73,9 @@ class SentryUser implements UserInterface {
     
     /**
      *  Register an user.
-     *
+     * 
+     * @param  array $data
+     * 
      * @return Array
      */
     public function register($data) 
@@ -120,7 +124,10 @@ class SentryUser implements UserInterface {
 
     /**
      * Update user.
-     *
+     * 
+     * @param  int $id      
+     * @param  array $data
+     * 
      * @return Array
      */
     public function edit($id,$data) 
@@ -177,7 +184,10 @@ class SentryUser implements UserInterface {
     
     /**
      * Update account.
-     *
+     * 
+     * @param  int $id      
+     * @param  array $data
+     * 
      * @return Array
      */
     public function account($id,$data) 
@@ -218,7 +228,10 @@ class SentryUser implements UserInterface {
     
     /**
      * Update password.
-     *
+     * 
+     * @param  int $id      
+     * @param  array $data
+     * 
      * @return Array
      */
     public function password($id,$data) 
@@ -257,9 +270,11 @@ class SentryUser implements UserInterface {
     
     
     /**
-     * Suspend a user
+     * Suspend an user
+     * 
      * @param  int $id      
-     * @param  int $minutes 
+     * @param  array $data
+     * 
      * @return Array          
      */
     public function suspend($id, $data) {
@@ -272,9 +287,77 @@ class SentryUser implements UserInterface {
             // Suspend the user
             $throttle->suspend();
             $result['success'] = 1;
-           
+            $result['message'] = trans('user.suspended');
         } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
-            $result['message'] = trans('users.notfound');
+            $result['error'] = trans('user.notfound');
+        }
+        return $result;
+    }
+
+    /**
+     * Unsuspend an user.
+     * 
+     * @param  int $id 
+     * 
+     * @return Array
+     */
+    public function unSuspend($id) {
+        $result = array('success' => 0);
+        try {
+            // Find the user using the user id
+            $throttle = $this->sentry->findThrottlerByUserId($id);
+            // Unsuspend the user
+            $throttle->unsuspend();
+            $result['success'] = 1;
+            $result['message'] = trans('user.unsuspended');
+        } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
+            $result['error'] = trans('user.notfound');
+        }
+        return $result;
+    }
+
+    /**
+     * Ban an user
+     * 
+     * @param  int $id 
+     * 
+     * @return Array     
+     */
+    public function ban($id) {
+       $result = array('success' => 0);
+        try {
+            // Find the user using the user id
+            $throttle = $this->sentry->findThrottlerByUserId($id);
+            // Ban the user
+            $throttle->ban();
+            $result['success'] = 1;
+            $result['message'] = trans('user.banned');
+        } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
+            $result['message'] = trans('user.notfound');
+        }
+        return $result;
+    }
+
+    /**
+     * Un-Ban an user
+     * 
+     * @param  int $id 
+     * 
+     * @return Array     
+     */
+    public function unBan($id)
+    {
+        $result = array('success' => 0);
+        try {
+            // Find the user using the user id
+            $throttle = $this->sentry->findThrottlerByUserId($id);
+            // Unban the user
+            $throttle->unBan();
+            $result['success'] = 1;
+            $result['message'] = trans('user.unbanned');
+        } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
+            $result['success'] = false;
+            $result['message'] = trans('user.notfound');
         }
         return $result;
     }
@@ -305,7 +388,8 @@ class SentryUser implements UserInterface {
     {
         $users = $this->sentry->findAllUsers();
         foreach ($users as $user) {
-            
+            $user->active = false;
+            $user->banned = false;
             if ($user->isActivated()) {
                 $user->active = true;
                 $user->status = trans('user.active');
@@ -325,6 +409,7 @@ class SentryUser implements UserInterface {
             if ($throttle->isBanned()) {
                 // User is Banned
                 $user->active = false;
+                $user->banned = true;
                 $user->status = trans('user.banned');
             }
             $user->groups = $user->getGroups();

@@ -53,5 +53,9 @@
         <script src="<% asset('users/services/users.js'); %>"></script>
         <script src="<% asset('users/controllers/users.js'); %>"></script>
         <script src="<% asset('users/routes/users.js'); %>"></script> 
+        @if(Config::get('lama.livereload'))
+            <script src="//localhost:35729/livereload.js"></script>
+        @endif
+        
     </body>
 </html>

@@ -1,10 +1,56 @@
 'use strict';
 
 angular.module('lama.users')
-    .controller('UserCtrl', ['$scope', 'users',
-        function($scope, users) {
-           $scope.hasUsers = users.length > 0;
-           $scope.users = users;
+    .controller('UserCtrl', ['$scope', '$state', 'users', 'User','Paginator','Current',
+        function($scope, $state, users, User, Paginator, Current) {
+            
+            $scope.hasUsers = users.length > 0;
+            $scope.paginator =  Paginator(2,5,users);
+            if(Current.get() > 1){
+                $scope.paginator.toPageId(Current.get());
+            }
+            $scope.unSuspend = function(id){
+                var unsuspend = User.unsuspend(id);
+                unsuspend.put().then(function() {
+                        Current.set($scope.paginator.getCurrentPage());
+                        return $state.go('user_actions.list',{}, {reload: true});
+                    },
+                    function error(reason) {
+                        throw new Error(reason);
+                    }
+                );
+            };
+            
+            $scope.ban = function(id){
+                var ban = User.ban(id);
+                ban.put().then(function() {
+                        Current.set($scope.paginator.getCurrentPage());
+                        return $state.go('user_actions.list',{}, {reload: true});
+                    },
+                    function error(reason) {
+                        throw new Error(reason);
+                    }
+                );
+            };
+            
+            $scope.unBan = function(id){
+                var unban = User.unban(id);
+                unban.put().then(function() {
+                        Current.set($scope.paginator.getCurrentPage());
+                        return $state.go('user_actions.list',{}, {reload: true});
+                    },
+                    function error(reason) {
+                        throw new Error(reason);
+                    }
+                );
+            };
+        }
+    ])
+    .controller('UserInnerCtrl', ['$scope', '$filter',
+        function($scope, $filter) {
+            $scope.user.created_at = $filter('tsToDate')($scope.user.created_at,'shortDate'); 
+            $scope.user.showSuspend = $scope.user.active && !$scope.user.banned;
+            $scope.user.showUnSuspend = !$scope.user.active && !$scope.user.banned;
         }
     ])
     .controller('UserParentActionsCtrl', ['$scope',
@@ -149,5 +195,17 @@ angular.module('lama.users')
                 );
             };
         }
-    ]);
-    
+    ])
+    .factory('Current',
+        function() {
+            var current = 1;
+            return{
+                get :function(){
+                    return current
+                },
+                set :function(c) {
+                    current = c;
+                }
+            };
+        }
+    );

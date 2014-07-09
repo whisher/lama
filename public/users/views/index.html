@@ -14,13 +14,13 @@
         </tr>
     </thead>
     <tbody>
-        <tr data-ng-repeat="user in users">
+        <tr data-ng-controller="UserInnerCtrl" data-ng-repeat="user in paginator.items">
             <td>{{user.id}}</td>
             <td>{{user.fullname}}</td>
             <td>{{user.username}}</td>
             <td>{{user.email}}</td>
             <td>{{user.status}}</td>
-            <td>{{user.created_at | date : 'shortDate'}}</td>
+            <td>{{user.created_at}}</td>
             <td>
                 <ul class="groups">
                     <li data-ng-repeat="group in user.groups">
@@ -29,11 +29,17 @@
                 </ul>
             </td>
             <td>
-                <a data-ng-if="user.active" data-ui-sref="user_actions.suspend({ id: user.id })" class="btn btn-warning btn-sm">
-                    <span class="glyphicon glyphicon-warning-sign"></span> Suspend
+                <a data-ng-if="!user.banned" data-ng-click="ban(user.id)" class="btn btn-warning btn-sm">
+                    <span class="glyphicon glyphicon-warning-sign"></span> Ban
                 </a>
-                <a data-ng-if="!user.active" data-ui-sref="user_actions.unsuspend({ id: user.id })" class="btn btn-warning btn-sm">
-                    <span class="glyphicon glyphicon-warning-sign"></span> Un-Suspend
+                <a data-ng-if="user.banned" data-ng-click="unBan(user.id)" class="btn btn-warning btn-sm">
+                    <span class="glyphicon glyphicon-warning-sign"></span> Un-Ban
+                </a>
+                <a data-ng-if="user.showSuspend" data-ui-sref="user_actions.suspend({ id: user.id })" class="btn btn-warning btn-sm">
+                    <span class="glyphicon glyphicon glyphicon-time"></span> Suspend
+                </a>
+                <a data-ng-if="user.showUnSuspend" data-ng-click="unSuspend(user.id)" class="btn btn-warning btn-sm">
+                    <span class="glyphicon glyphicon glyphicon-time"></span> Un-Suspend
                 </a>
                 <a data-ui-sref="user_actions.edit({ id: user.id })" class="btn btn-warning btn-sm">
                     <span class="glyphicon glyphicon-edit"></span> Edit
@@ -45,4 +51,22 @@
         </tr>
     </tbody>
 </table>
-    
+<div class="text-center" data-ng-if="hasUsers">
+    <ul class="pagination">
+        <li data-ng-class="{disabled: !paginator.hasPrevious()}">
+            <a href data-ng-click="paginator.previous()">&laquo; </a>
+        </li>
+        <li data-ng-class="{disabled: !paginator.hasFirst()}">
+            <a href data-ng-click="paginator.first()">&lsaquo;</a>
+        </li>
+        <li data-ng-repeat="n in [] | pagination:paginator.getStart():paginator.getEnd()" data-ng-class="{active: n == paginator.getCurrentPage()}">
+            <a  href data-ng-click="paginator.toPageId(n)">{{n}}</a>
+        </li>
+        <li data-ng-class="{disabled: !paginator.hasLast()}">
+            <a href data-ng-click="paginator.last()">&rsaquo; </a>
+        </li>
+        <li data-ng-class="{disabled: !paginator.hasNext()}">
+            <a href data-ng-click="paginator.next()">&raquo;</a>
+        </li>
+    </ul>
+</div>

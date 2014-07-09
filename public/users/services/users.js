@@ -22,6 +22,16 @@ angular.module('lama.users')
             this.suspend = function(id){
                 return this.one(id).one('suspend');
             };
+            this.unsuspend = function(id){
+                return this.one(id).one('unsuspend');
+            };
+            this.ban = function(id){
+                return this.one(id).one('ban');
+            };
+            this.unban = function(id){
+                return this.one(id).one('unban');
+            };
+            
         }
         return angular.extend(Restify('user'), new User());
     }])

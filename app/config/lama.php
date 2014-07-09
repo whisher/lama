@@ -1,6 +1,5 @@
 <?php
 
 return array(
-    'loggedafterregister'=>true,
-    'activatedafterregister'=>true
+        'activateAndLoggedAfterRegister'=>false //if false user get a confirmation email 
     );

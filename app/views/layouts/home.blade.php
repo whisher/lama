@@ -37,9 +37,11 @@
         <script src="<% asset('init.js'); %>"></script>
         <!-- System -->
         <script src="<% asset('system/system.js'); %>"></script>
+        <script src="<% asset('system/filters/filters.js'); %>"></script>
         <script src="<% asset('system/services/interceptor.js'); %>"></script>
         <script src="<% asset('system/services/global.js'); %>"></script>
         <script src="<% asset('system/services/restify.js'); %>"></script>
+        <script src="<% asset('system/services/paginator.js'); %>"></script>
         <script src="<% asset('system/controllers/header.js'); %>"></script>
         <script src="<% asset('system/routes/system.js'); %>"></script>
         <script src="<% asset('system/directives/system.js'); %>"></script> 

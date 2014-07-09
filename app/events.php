@@ -1,9 +1,9 @@
 <?php
 
 // User Login event
-Event::listen('session.login', function($user)
-{
-    Session::put('user', $user);
+Event::listen('session.login', function($data)
+{ 
+    Session::put('user', $data);
 });
 
 // User logout event
@@ -13,8 +13,11 @@ Event::listen('session.logout', function()
 });
 
 // User register event
-Event::listen('user.register', function($user)
+Event::listen('user.register', function($data)
 {
-    Session::put('user', $user);
+    Session::put('user', $data);
 });
 
+
+
+Event::subscribe('Users\Mailer\UserMailer');

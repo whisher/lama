@@ -23,6 +23,10 @@ angular.module('lama.users')
                 url: '/user/register',
                 templateUrl: 'users/views/register.html',
                 controller:'SessionRegisterCtrl'
+            })
+            .state('session.thanks', {
+                url: '/user/thanks',
+                templateUrl: 'users/views/session-thanks.html'
             });
         }
     ]);

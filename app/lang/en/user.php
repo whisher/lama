@@ -15,5 +15,6 @@ return array(
     'suspended'=>'Suspended',
     'unsuspended'=>'Un-Suspended',
     'banned'=>'Banned',
-    'unbanned'=>'Un-Banned'
+    'unbanned'=>'Un-Banned',
+    'alreadyactive'=>'That account has already been activated.',
 );

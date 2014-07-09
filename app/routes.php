@@ -23,6 +23,7 @@ Route::put('user/{id}/suspend', array('as' => 'base.user.suspend', 'uses' => 'Ap
 Route::put('user/{id}/unsuspend', array('as' => 'base.user.unsuspend', 'uses' => 'App\Controllers\UserController@unsuspend'))->where('id', '[0-9]+')->before('xhr|xsrf|hasAccess:users');
 Route::put('user/{id}/ban', array('as' => 'base.user.ban', 'uses' => 'App\Controllers\UserController@ban'))->where('id', '[0-9]+')->before('xhr|xsrf|hasAccess:users');
 Route::put('user/{id}/unban', array('as' => 'base.user.unban', 'uses' => 'App\Controllers\UserController@unban'))->where('id', '[0-9]+')->before('xhr|xsrf|hasAccess:users');
+Route::get('user/{id}/activate/{code}', array('as' => 'base.user.activate', 'uses' => 'App\Controllers\UserController@activate'))->where('id', '[0-9]+');
 Route::delete('user/{id}', array('as' => 'base.user.destroy', 'uses' => 'App\Controllers\UserController@destroy'))->where('id', '[0-9]+')->before('hasAccess:users');
 
 /* Session */

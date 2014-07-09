@@ -88,7 +88,7 @@ class SentryUser implements UserInterface {
                 'email' => e($data['email']),
                 'password' => e($data['password']),
                 'fullname' => e($data['fullname']),
-                'username' => e($data['username'])), Config::get('lama.activatedafterregister'));
+                'username' => e($data['username'])), Config::get('lama.activateAndLoggedAfterRegister'));
             //success!
             $result['success'] = 1;
             $result['user'] = array(
@@ -101,8 +101,13 @@ class SentryUser implements UserInterface {
             // Assign the groups to the users
             $user->addGroup($userGroup);
             // Do login
-            if (Config::get('lama.loggedafterregister')) {
-                $this->sentry->login($user, true);
+            if (Config::get('lama.activateAndLoggedAfterRegister')) {
+                $this->sentry->login($user, false);
+                $result['logged'] = 1;
+            }
+            else{
+               $result['user']['activationCode'] = $user->getActivationCode();
+               $result['logged'] = 0; 
             }
         } catch (\Cartalyst\Sentry\Users\LoginRequiredException $e) {
             $result['error'] = trans('user.loginreq');
@@ -362,6 +367,66 @@ class SentryUser implements UserInterface {
         return $result;
     }
 
+    /**
+     * Attempt activation for the specified user
+     * 
+     * @param  int $id   
+     * @param  string $code 
+     * 
+     * @return array       
+     */
+    public function activate($id, $code) 
+    {
+        $result = array('success' => 0);
+        try {
+            // Find the user using the user id
+            $user = $this->sentry->findUserById($id);
+            // Attempt to activate the user
+            if ($user->attemptActivation($code)) {
+                // User activation passed
+                $result['success'] = 1;
+                $result['user'] = $user;
+            } 
+        } catch (\Cartalyst\Sentry\Users\UserAlreadyActivatedException $e) {
+           $result['error'] = trans('user.alreadyactive');
+        } catch (\Cartalyst\Sentry\Users\UserExistsException $e) {
+           $result['error'] = trans('user.exists');
+        } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
+           $result['message'] = trans('user.notfound');
+        }
+        return $result;
+    }
+    
+    /**
+     * Attempt Login 
+     * 
+     * @param  Sentry $user
+     * @param  boolean $remember
+     * 
+     * @return array       
+     */
+    public function login($user, $remember) {
+        $result = array('success' => 0);
+        try {
+            $this->sentry->login($user, $remember);
+            $result['success'] = 1;
+        } catch (Cartalyst\Sentry\Users\LoginRequiredException $e) {
+            $result['error'] = trans('user.loginreq');
+        } catch (Cartalyst\Sentry\Users\UserNotFoundException $e) {
+            $result['error'] = trans('user.notfound');
+        } catch (Cartalyst\Sentry\Users\UserNotActivatedException $e) {
+            $result['error'] = trans('user.notactivated');
+        }
+        catch (Cartalyst\Sentry\Throttling\UserSuspendedException $e) {
+            $time = $throttle->getSuspensionTime();
+            $result['error'] = trans('session.suspended');
+        } catch (Cartalyst\Sentry\Throttling\UserBannedException $e) {
+            $result['error'] = trans('session.banned');
+        }
+        return $result;
+    }
+            
+    
     /**
      * Return a specific user from the given id
      * 

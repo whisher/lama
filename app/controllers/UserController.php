@@ -47,7 +47,12 @@ class UserController extends Controller{
         if($isValid){
             $result = $this->user->register($this->registerForm->data());
             if (isset($result['user']) && ($result['success'] > 0)) {
-                Event::fire('user.register', $result['user']);
+                if ($result['logged'] > 0) {
+                    Event::fire('user.register', array('data'=>$result['user']));
+                }
+                else{
+                    Event::fire('user.mail.register', array('data'=>$result['user']));
+                }
                 return Response::json($result,200);
             } 
             $error = isset($result['error'])?array_pop($result):trans('user.generror');
@@ -63,6 +68,24 @@ class UserController extends Controller{
         );
     }
 
+    /**
+     * Activate a new user
+     * 
+     * @param  int $id   
+     * @param  string $code
+     *  
+     * @return Response
+     */
+    public function activate($id, $code) 
+    {
+        $result = $this->user->activate($id, $code);
+        if ($result['success'] > 0) {
+            $this->user->login($result['user'], false);
+            return \Redirect::route('home');
+        } 
+        return Response::make('Not Found', 404);
+    }
+    
     /**
      * Create an user.
      *
@@ -235,7 +258,7 @@ class UserController extends Controller{
     }
     
     /**
-     * Ban a user
+     * Ban an user
      * 
      * @param  int $id 
      * 
@@ -250,6 +273,13 @@ class UserController extends Controller{
         return Response::make('Not Found', 404);
     }
 
+    /**
+     * Unban an user
+     * 
+     * @param  int $id 
+     * 
+     * @return Redirect     
+     */
     public function unban($id) 
     {
         $result = $this->user->unBan($id);

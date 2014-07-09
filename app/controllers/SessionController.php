@@ -28,11 +28,11 @@ class SessionController extends Controller {
      */
     public function store() 
     { 
-        $isValid = $this->signinForm->valid(Input::only('email', 'password'));
+        $isValid = $this->signinForm->valid(Input::only('email', 'password', 'remember'));
         if ($isValid) {
             $result = $this->session->store($this->signinForm->data());
-            if (isset($result['user']) && $result['success']) {
-                Event::fire('user.register', $result['user']);
+            if (isset($result['user']) && ($result['success'] > 0)) {
+                Event::fire('session.login', array('data'=>$result['user']));
                 return Response::json($result, 200);
             }
             $error = isset($result['error'])?array_pop($result):trans('session.invalid');

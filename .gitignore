@@ -3,6 +3,7 @@ nbproject/
 .bower-*/
 composer.phar
 composer.lock
+node_modules/
 bootstrap/compiled.php
 public/bower_components
 app/config/local

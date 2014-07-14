@@ -4,7 +4,9 @@ namespace App\Controllers;
 use \Controller,
     \Event,
     \Input,
-    \Response;
+    \Redirect,   
+    \Response,
+    \View;
     
 use Users\User\UserInterface;
 use Users\Form\Register\RegisterForm;
@@ -48,7 +50,7 @@ class UserController extends Controller{
             $result = $this->user->register($this->registerForm->data());
             if (isset($result['user']) && ($result['success'] > 0)) {
                 if ($result['logged'] > 0) {
-                    Event::fire('user.register', array('data'=>$result['user']));
+                    Event::fire('session.login', array('data'=>$result['user']));
                 }
                 else{
                     Event::fire('user.mail.register', array('data'=>$result['user']));
@@ -81,9 +83,9 @@ class UserController extends Controller{
         $result = $this->user->activate($id, $code);
         if ($result['success'] > 0) {
             $this->user->login($result['user'], false);
-            return \Redirect::route('home');
+            return Redirect::route('home');
         } 
-        return Response::make('Not Found', 404);
+        return View::make('errors.404');
     }
     
     /**
@@ -185,6 +187,51 @@ class UserController extends Controller{
         );
     }
     
+    /**
+     * Process Forgot Password request
+     * 
+     * @return Response
+     */
+    public function forgot() 
+    {
+        $isValid = $this->updateForm->valid(Input::only('email'));
+        if ($isValid) {
+            $result = $this->user->forgot($this->updateForm->data());
+            if (isset($result['user']) && ($result['success'] > 0)) {
+                Event::fire('user.mail.forgot', array('data'=>$result['user']));
+                return Response::json($result,200);
+            } 
+            $error = isset($result['error'])?array_pop($result):trans('user.generror');
+            return Response::json(array(
+              'success'=>0,
+              'errors' => array('error'=>array($error))),  
+            200);
+        }
+        return Response::json(array(
+                    'success' => 0,
+                    'errors' => $this->updateForm->errors()), 
+                    200
+        );
+    }
+    
+    /**
+     * Process a password reset request link
+     * 
+     * @param  $id int
+     * @param  $code string
+     * 
+     * @return mixed
+     */
+    public function reset($id, $code) 
+    {
+        $result = $this->user->resetPassword($id, $code);
+        if (isset($result['user']) && ($result['success'] > 0)) {
+            Event::fire('user.mail.newpassword',array('data'=>$result['user']));
+            return Redirect::route('base.user.newpassword');
+        } 
+        return View::make('errors.404');
+    }
+
     /**
      * Update the user.
      *

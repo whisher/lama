@@ -16,6 +16,9 @@ angular.module('lama.users')
             this.register = function(data){
                 return this.all('user/create').post(data);
             };
+            this.forgot = function(data){
+                return this.all('user/forgot').post(data);
+            };
             this.edit = function(id){
                 return this.one(id).one('edit');
             };

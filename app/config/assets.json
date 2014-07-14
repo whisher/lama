@@ -1,0 +1,32 @@
+{
+   "vendor":{ 
+        "css": {
+            "public/build/css/vendor.min.css": [
+                "bower_components/bootstrap/dist/css/bootstrap.min.css"
+             ]
+        },
+        "js": {
+            "public/build/js/vendor.min.js": [
+                "bower_components/lodash/dist/lodash.min.js",
+                "bower_components/jquery/dist/jquery.min.js",
+                "bower_components/bootstrap/dist/js/bootstrap.min.js",
+                "bower_components/angular/angular.min.js",
+                "bower_components/angular-ui-router/release/angular-ui-router.min.js",
+                "bower_components/restangular/dist/restangular.min.js"
+            ]
+        }
+    },
+    "scripts":{ 
+       "css": {
+            "public/build/css/scripts.min.css": [
+                "public/*/assets/css/*.css"
+            ]
+       },
+       "js": {
+            "public/build/js/scripts.min.js": [
+                "public/init.js",
+                "public/**/*.js"
+            ]
+        }
+    }
+}

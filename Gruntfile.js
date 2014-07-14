@@ -1,5 +1,7 @@
 'use strict';
 
+
+
 var paths = {
     js: ['Gruntfile.js', 'public/**/*.js', '!public/bower_components/**'],
     html: ['public/**/views/**'],
@@ -7,21 +9,12 @@ var paths = {
 };
 
 module.exports = function(grunt) {
-    
+
     require('time-grunt')(grunt);
-    
+
    // Project Configuration
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        watch: {
-            options: {
-                livereload: true
-            },
-            page: {
-                files: ['*.php', '*.html','*.js','*.css'],
-                tasks: ['php']
-            }
-        },
         jshint: {
             all: {
                 src: paths.js,
@@ -33,16 +26,25 @@ module.exports = function(grunt) {
         php: {
             dist: {
                 options: {
-                    port: 5000,
+                    port: 8000,
                     keepalive: true,
                     open: true
                 }
+            },
+            watch: {
+                 options: {
+                     livereload: true
+                 },
+                 page: {
+                        files: ['*.php', '*.html','*.js','*.css'],
+                        tasks: ['php']
+                 } 
             }
         }
     });
 
     //Load NPM tasks
     require('load-grunt-tasks')(grunt);
-    grunt.registerTask('default', ['jshint']);
-    
+    grunt.registerTask('default', ['jshint','php']);
+
 };

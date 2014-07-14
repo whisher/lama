@@ -12,7 +12,8 @@ Route::get('/', array('as' => 'home', 'uses' => 'App\Controllers\HomeController@
 
 /* User */
 Route::post('user', array('as' => 'base.user.register', 'uses' => 'App\Controllers\UserController@register'))->before('issessionedin|xhr|xsrf'); 
-Route::post('user/create', array('as' => 'base.user.create', 'uses' => 'App\Controllers\UserController@create'))->before('hasAccess:users|xhr|xsrf'); 
+Route::post('user/create', array('as' => 'base.user.create', 'uses' => 'App\Controllers\UserController@create'))->before('hasAccess:users|xhr|xsrf');
+Route::post('user/forgot', array('as' => 'base.user.forgot', 'uses' => 'App\Controllers\UserController@forgot'))->before('xhr|xsrf'); 
 Route::get('user', array('as' => 'base.user.index', 'uses' => 'App\Controllers\UserController@index'))->before('hasAccess:users');
 Route::get('user/{id}', array('as' => 'base.user.show', 'uses' => 'App\Controllers\UserController@show'))->where('id', '[0-9]+')->before('hasAccessAndIsOwner:users.show');
 Route::put('user/{id}', array('as' => 'base.user.edit', 'uses' => 'App\Controllers\UserController@edit'))->where('id', '[0-9]+')->before('xhr|xsrf|hasAccess:users');
@@ -24,7 +25,13 @@ Route::put('user/{id}/unsuspend', array('as' => 'base.user.unsuspend', 'uses' =>
 Route::put('user/{id}/ban', array('as' => 'base.user.ban', 'uses' => 'App\Controllers\UserController@ban'))->where('id', '[0-9]+')->before('xhr|xsrf|hasAccess:users');
 Route::put('user/{id}/unban', array('as' => 'base.user.unban', 'uses' => 'App\Controllers\UserController@unban'))->where('id', '[0-9]+')->before('xhr|xsrf|hasAccess:users');
 Route::get('user/{id}/activate/{code}', array('as' => 'base.user.activate', 'uses' => 'App\Controllers\UserController@activate'))->where('id', '[0-9]+');
+Route::get('user/{id}/reset/{code}', array('as' => 'base.user.reset', 'uses' => 'App\Controllers\UserController@reset'))->where('id', '[0-9]+');
 Route::delete('user/{id}', array('as' => 'base.user.destroy', 'uses' => 'App\Controllers\UserController@destroy'))->where('id', '[0-9]+')->before('hasAccess:users');
+
+Route::get('user/newpassword', array('as' => 'base.user.newpassword', function()
+{
+	return View::make('users.newpassword');
+}));
 
 /* Session */
 Route::get('logout', array('as' => 'session.destroy', 'uses' => 'App\Controllers\SessionController@destroy'));

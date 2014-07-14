@@ -8,9 +8,12 @@
         <meta name="author" content="whisher">
         <link rel="shortcut icon" href="<% asset('favicon.ico');  %>">
         <title>Lama</title>
-        <link type="text/css" rel="stylesheet" href="<% asset('bower_components/bootstrap/dist/css/bootstrap.min.css');  %>">
-        <link type="text/css" rel="stylesheet" href="<% asset('system/assets/css/system.css'); %>">
-        <link type="text/css" rel="stylesheet" href="<% asset('users/assets/css/users.css'); %>">
+        @foreach ($assets['vendor']['css'] as $file)
+            <link type="text/css" rel="stylesheet" href="<% asset($file);  %>">
+        @endforeach
+        @foreach ($assets['scripts']['css'] as $file)
+            <link type="text/css" rel="stylesheet" href="<% asset($file);  %>">
+        @endforeach
         <!-- HTML5 shim for IE8 support of HTML5 elements -->
         <!--[if lt IE 9]>
           <script src="<% asset('bower_components/html5shiv/dist/html5shiv.min.js');  %>"></script>
@@ -26,34 +29,13 @@
                 <p>Lama - &#169; 2014 All Rights Reserved</p>
             </div>
         </div>
-        <script src="<% asset('bower_components/lodash/dist/lodash.min.js');  %>"></script>
-        <script src="<% asset('bower_components/jquery/dist/jquery.min.js');  %>"></script>
-        <script src="<% asset('bower_components/bootstrap/dist/js/bootstrap.min.js'); %>"></script>
-        <script src="<% asset('bower_components/angular/angular.min.js'); %>"></script>
-        <script src="<% asset('bower_components/angular-ui-router/release/angular-ui-router.min.js'); %>"></script>
-        <script src="<% asset('bower_components/restangular/dist/restangular.min.js'); %>"></script>
-        <script src="<% asset('bower_components/restangular/dist/restangular.min.js'); %>"></script>
-        <!-- Init -->
-        <script src="<% asset('init.js'); %>"></script>
-        <!-- System -->
-        <script src="<% asset('system/system.js'); %>"></script>
-        <script src="<% asset('system/filters/filters.js'); %>"></script>
-        <script src="<% asset('system/services/interceptor.js'); %>"></script>
-        <script src="<% asset('system/services/global.js'); %>"></script>
-        <script src="<% asset('system/services/restify.js'); %>"></script>
-        <script src="<% asset('system/services/paginator.js'); %>"></script>
-        <script src="<% asset('system/controllers/header.js'); %>"></script>
-        <script src="<% asset('system/routes/system.js'); %>"></script>
-        <script src="<% asset('system/directives/system.js'); %>"></script> 
-        <!-- Users -->
-        <script src="<% asset('users/users.js'); %>"></script>
-        <script src="<% asset('users/services/session.js'); %>"></script>
-        <script src="<% asset('users/controllers/session.js'); %>"></script>
-        <script src="<% asset('users/routes/session.js'); %>"></script> 
-        <script src="<% asset('users/services/users.js'); %>"></script>
-        <script src="<% asset('users/controllers/users.js'); %>"></script>
-        <script src="<% asset('users/routes/users.js'); %>"></script> 
-        @if(Config::get('lama.livereload'))
+        @foreach ($assets['vendor']['js'] as $file)
+            <script src="<% asset($file);  %>"></script>
+        @endforeach
+        @foreach ($assets['scripts']['js'] as $file)
+            <script src="<% asset($file);  %>"></script>
+        @endforeach
+        @if(Config::get('lama.isdev'))
             <script src="//localhost:35729/livereload.js"></script>
         @endif
         

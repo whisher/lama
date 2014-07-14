@@ -2,7 +2,7 @@
 
 angular.module('lama.system')
     .controller('HeaderController', ['$scope', '$rootScope', 'Global',
-        function($scope, $rootScope, Global) {
+        function($scope, $rootScope, Global) { 
             $scope.global = Global;
             $rootScope.$on('loggedin', function() {
                 $scope.global = {

@@ -1,18 +1,18 @@
 'use strict';
 
 angular.module('lama.users')
-    .controller('UserCtrl', ['$scope', '$state', 'users', 'User','Paginator','Current',
-        function($scope, $state, users, User, Paginator, Current) {
+    .controller('UserCtrl', ['$scope', '$state', 'users', 'User','Paginator','CurrentPageMemory',
+        function($scope, $state, users, User, Paginator, CurrentPageMemory) {
             
             $scope.hasUsers = users.length > 0;
             $scope.paginator =  Paginator(2,5,users);
-            if(Current.get() > 1){
-                $scope.paginator.toPageId(Current.get());
+            if(CurrentPageMemory.get() > 1){
+                $scope.paginator.toPageId(CurrentPageMemory.get());
             }
             $scope.unSuspend = function(id){
                 var unsuspend = User.unsuspend(id);
                 unsuspend.put().then(function() {
-                        Current.set($scope.paginator.getCurrentPage());
+                        CurrentPageMemory.set($scope.paginator.getCurrentPage());
                         return $state.go('user_actions.list',{}, {reload: true});
                     },
                     function error(reason) {
@@ -24,7 +24,7 @@ angular.module('lama.users')
             $scope.ban = function(id){
                 var ban = User.ban(id);
                 ban.put().then(function() {
-                        Current.set($scope.paginator.getCurrentPage());
+                        CurrentPageMemory.set($scope.paginator.getCurrentPage());
                         return $state.go('user_actions.list',{}, {reload: true});
                     },
                     function error(reason) {
@@ -36,7 +36,7 @@ angular.module('lama.users')
             $scope.unBan = function(id){
                 var unban = User.unban(id);
                 unban.put().then(function() {
-                        Current.set($scope.paginator.getCurrentPage());
+                        CurrentPageMemory.set($scope.paginator.getCurrentPage());
                         return $state.go('user_actions.list',{}, {reload: true});
                     },
                     function error(reason) {
@@ -60,7 +60,7 @@ angular.module('lama.users')
             return Object.keys(object).some(function (key) {
                     return object[key];
                 });
-            } 
+            }; 
         }
     ])
     .controller('UserCreateCtrl', ['$scope', '$state', 'groups', 'User',
@@ -110,7 +110,7 @@ angular.module('lama.users')
             angular.forEach($scope.user.groups, function(value, key) {
                var hasGroup = _.find($scope.groups, function(group) {
                   return group.id === value.id;
-               })
+               });
                if(hasGroup){
                    userHasGroup[value.id] = true;
                }
@@ -196,15 +196,15 @@ angular.module('lama.users')
             };
         }
     ])
-    .factory('Current',
+    .factory('CurrentPageMemory',
         function() {
             var current = 1;
             return{
                 get :function(){
-                    return current
+                    return current;
                 },
-                set :function(c) {
-                    current = c;
+                set :function(num) {
+                    current = num;
                 }
             };
         }

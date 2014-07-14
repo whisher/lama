@@ -34,11 +34,27 @@ angular.module('lama.users')
                                 $rootScope.$emit('loggedin');
                                 return $state.go('home');
                             }
-                            return $state.go('session.thanks');
+                            return $state.go('session.register-thanks');
                         }
                         $scope.errors = data.errors;
                     }
                 );
+            };
+        }
+    ])
+    .controller('SessionForgotPasswordCtrl', ['$scope', '$state', 'User',
+        function($scope, $state, User) {
+            $scope.user = {};
+            $scope.errors = null;
+            $scope.save = function(){
+                User.forgot($scope.user).then(
+                    function(data) {
+                        if(data.success){
+                            return $state.go('session.forgot-thanks');
+                        }
+                        $scope.errors = data.errors;
+                    }
+                    );
             };
         }
     ]);

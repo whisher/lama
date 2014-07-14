@@ -24,9 +24,18 @@ angular.module('lama.users')
                 templateUrl: 'users/views/register.html',
                 controller:'SessionRegisterCtrl'
             })
-            .state('session.thanks', {
-                url: '/user/thanks',
-                templateUrl: 'users/views/session-thanks.html'
+            .state('session.password', {
+                url: '/user/forgot-password',
+                templateUrl: 'users/views/forgot-password.html',
+                controller:'SessionForgotPasswordCtrl'
+            })
+            .state('session.register-thanks', {
+                url: '/user/register-thanks',
+                templateUrl: 'users/views/register-thanks.html'
+            })
+            .state('session.forgot-thanks', {
+                url: '/user/forgot-thanks',
+                templateUrl: 'users/views/forgot-thanks.html'
             });
         }
     ]);

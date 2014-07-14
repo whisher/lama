@@ -49,31 +49,15 @@
      * @return Array
      */
     public function password($id,$data);
-
+    
     /**
-     * Remove the user.
-     *
-     * @param  int  $id
+     * Handle a password reset 
      * 
-     * @return Boolean
-     */
-    public function destroy($id);
-
-    /**
-     * Return a specific user from the given id
+     * @param  Array $data 
      * 
-     * @param  integer $id
-     * 
-     * @return User
+     * @return Array      
      */
-    public function byId($id);
-
-    /**
-     * Return all the registered users
-     *
-     * @return stdObject Collection of users
-     */
-    public function all();
+    public function forgot($data);
     
     /**
      * Suspend a user
@@ -111,5 +95,63 @@
      * @return Array     
      */
     public function unBan($id);
+    
+    /**
+     * Attempt activation for the specified user
+     * 
+     * @param  int $id   
+     * @param  string $code 
+     * 
+     * @return array       
+     */
+    public function activate($id, $code);
+    
+     /**
+     * Process the password reset request
+     * 
+     * @param  int $id   
+     * @param  string $code 
+     * 
+     * @return Array
+     */
+    public function resetPassword($id, $code);
+    
+    /**
+     * Attempt Login 
+     * 
+     * @param  Sentry $user
+     * @param  boolean $remember
+     * 
+     * @return array       
+     */
+    public function login($user, $remember);
+    
+    
+    /**
+     * Remove the user.
+     *
+     * @param  int  $id
+     * 
+     * @return Boolean
+     */
+    public function destroy($id);
+
+    /**
+     * Return a specific user from the given id
+     * 
+     * @param  integer $id
+     * 
+     * @return User
+     */
+    public function byId($id);
+
+    /**
+     * Return all the registered users
+     *
+     * @return stdObject Collection of users
+     */
+    public function all();
+    
+    public function generatePassword($length,$strength);
     
 }

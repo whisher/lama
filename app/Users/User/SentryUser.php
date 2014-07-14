@@ -273,6 +273,32 @@ class SentryUser implements UserInterface {
         return $result;
     }
     
+    /**
+     * Handle a password reset 
+     * 
+     * @param  Array $data 
+     * 
+     * @return Array      
+     */
+    public function forgot($data) {
+        $result = array('success' => 0);
+        try {
+            $user = $this->sentry->getUserProvider()->findByLogin(e($data['email']));
+            $result['success'] = 1;
+            $result['user'] = array(
+                'id' => $user->getId(),
+                'email' => $user->getEmail(),
+                'resetCode' => $user->getResetPasswordCode());
+           
+        } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
+            $result['error'] = trans('user.notfound');
+        } catch (\Illuminate\Database\QueryException $e) {
+            $result['error'] = trans('user.querror');
+        } catch (\Exception $e) {
+            $result['error'] = trans('user.generror');
+        }
+        return $result;
+    }
     
     /**
      * Suspend an user
@@ -292,9 +318,12 @@ class SentryUser implements UserInterface {
             // Suspend the user
             $throttle->suspend();
             $result['success'] = 1;
-            $result['message'] = trans('user.suspended');
         } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
             $result['error'] = trans('user.notfound');
+        } catch (\Illuminate\Database\QueryException $e) {
+            $result['error'] = trans('user.querror');
+        } catch (\Exception $e) {
+            $result['error'] = trans('user.generror');
         }
         return $result;
     }
@@ -314,9 +343,12 @@ class SentryUser implements UserInterface {
             // Unsuspend the user
             $throttle->unsuspend();
             $result['success'] = 1;
-            $result['message'] = trans('user.unsuspended');
         } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
             $result['error'] = trans('user.notfound');
+        } catch (\Illuminate\Database\QueryException $e) {
+            $result['error'] = trans('user.querror');
+        } catch (\Exception $e) {
+            $result['error'] = trans('user.generror');
         }
         return $result;
     }
@@ -336,9 +368,12 @@ class SentryUser implements UserInterface {
             // Ban the user
             $throttle->ban();
             $result['success'] = 1;
-            $result['message'] = trans('user.banned');
         } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
             $result['message'] = trans('user.notfound');
+        }catch (\Illuminate\Database\QueryException $e) {
+            $result['error'] = trans('user.querror');
+        } catch (\Exception $e) {
+            $result['error'] = trans('user.generror');
         }
         return $result;
     }
@@ -363,6 +398,10 @@ class SentryUser implements UserInterface {
         } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
             $result['success'] = false;
             $result['message'] = trans('user.notfound');
+        }catch (\Illuminate\Database\QueryException $e) {
+            $result['error'] = trans('user.querror');
+        } catch (\Exception $e) {
+            $result['error'] = trans('user.generror');
         }
         return $result;
     }
@@ -393,10 +432,45 @@ class SentryUser implements UserInterface {
            $result['error'] = trans('user.exists');
         } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
            $result['message'] = trans('user.notfound');
+        }catch (\Illuminate\Database\QueryException $e) {
+            $result['error'] = trans('user.querror');
+        } catch (\Exception $e) {
+            $result['error'] = trans('user.generror');
         }
         return $result;
     }
     
+    /**
+     * Process the password reset request
+     * 
+     * @param  int $id   
+     * @param  string $code 
+     * 
+     * @return Array
+     */
+    public function resetPassword($id, $code)
+    {
+        $result = array('success' => 0);
+        try {
+            // Find the user
+            $user = $this->sentry->getUserProvider()->findById($id);
+            $newPassword = $this->_generatePassword(8, 8);
+            // Attempt to reset the user password
+            if ($user->attemptResetPassword($code, $newPassword)) {
+                // Email the reset code to the user
+                $result['success'] = 1;
+                $result['user'] = array(
+                    'id' => $user->getId(),
+                    'email' => $user->getEmail(),
+                    'newPassword' => $newPassword);
+            }
+        } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
+            $result['success'] = false;
+            $result['message'] = trans('users.notfound');
+        }
+        return $result;
+    }
+
     /**
      * Attempt Login 
      * 
@@ -416,12 +490,15 @@ class SentryUser implements UserInterface {
             $result['error'] = trans('user.notfound');
         } catch (Cartalyst\Sentry\Users\UserNotActivatedException $e) {
             $result['error'] = trans('user.notactivated');
-        }
-        catch (Cartalyst\Sentry\Throttling\UserSuspendedException $e) {
+        } catch (Cartalyst\Sentry\Throttling\UserSuspendedException $e) {
             $time = $throttle->getSuspensionTime();
             $result['error'] = trans('session.suspended');
         } catch (Cartalyst\Sentry\Throttling\UserBannedException $e) {
             $result['error'] = trans('session.banned');
+        } catch (\Illuminate\Database\QueryException $e) {
+            $result['error'] = trans('user.querror');
+        } catch (\Exception $e) {
+            $result['error'] = trans('user.generror');
         }
         return $result;
     }
@@ -501,4 +578,39 @@ class SentryUser implements UserInterface {
         return true;
     }
 
+    /**
+     * Generate password - helper function
+     * From http://www.phpscribble.com/i4xzZu/Generate-random-passwords-of-given-length-and-strength
+     *
+     */
+    public function generatePassword($length,$strength) 
+    {
+        $vowels = 'aeiouy';
+        $consonants = 'bcdfghjklmnpqrstvwxz';
+        if ($strength & 1) {
+            $consonants .= 'BCDFGHJKLMNPQRSTVWXZ';
+        }
+        if ($strength & 2) {
+            $vowels .= "AEIOUY";
+        }
+        if ($strength & 4) {
+            $consonants .= '23456789';
+        }
+        if ($strength & 8) {
+            $consonants .= '@#$%';
+        }
+
+        $password = '';
+        $alt = time() % 2;
+        for ($i = 0; $i < $length; $i++) {
+            if ($alt == 1) {
+                $password .= $consonants[(rand() % strlen($consonants))];
+                $alt = 0;
+            } else {
+                $password .= $vowels[(rand() % strlen($vowels))];
+                $alt = 1;
+            }
+        }
+        return $password;
+    }
 }

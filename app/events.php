@@ -12,12 +12,5 @@ Event::listen('session.logout', function()
     Session::flush();
 });
 
-// User register event
-Event::listen('user.register', function($data)
-{
-    Session::put('user', $data);
-});
-
-
-
+// User mailer event
 Event::subscribe('Users\Mailer\UserMailer');

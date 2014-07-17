@@ -124,7 +124,8 @@ return array(
                 'Cartalyst\Sentry\SentryServiceProvider',
                 'Users\UserServiceProvider',
                 'Users\FormServiceProvider',
-                'Users\ValidationServiceProvider' 
+                'Users\ValidationServiceProvider',
+                'Users\MenuServiceProvider' 
 
 	),
 

@@ -14,7 +14,6 @@ class AddFieldsUsers extends Migration {
     {
         Schema::table('users', function(Blueprint $table)
         {
-            /* TODO unittest */
             $table->string('fullname');
             $table->string('username')->unique();
         });

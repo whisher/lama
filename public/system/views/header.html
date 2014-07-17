@@ -10,17 +10,8 @@
     </div><!--/.navbar-header -->
     <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-left">
-            <li data-ng-class="{active: $state.includes('home')}">
-                <a data-ui-sref="home">
-                    <i class="glyphicon glyphicon-home"></i>
-                    <span>Home</span>  
-                </a>
-            </li>
-            <li data-ng-class="{active: $state.includes('users_list')}">
-                <a data-ui-sref="user_actions.list">
-                    <i class="glyphicon glyphicon-user"></i>
-                    <span>Users</span>  
-                </a>
+            <li data-ng-repeat="menu in menus"  data-ng-class="{active:$state.includes('{{menu.link}}')}">
+                <a data-ui-sref="{{menu.link}}">{{menu.title}}</a>
             </li>
         </ul>
         <ul class="nav navbar-nav navbar-right" data-ng-if="!global.authenticated">

@@ -3,7 +3,7 @@
 //Articles service used for articles REST endpoint
 angular.module('lama.users')
     .config(['RestangularProvider',function(RestangularProvider) {
-        RestangularProvider.setBaseUrl('/');
+        RestangularProvider.setBaseUrl('/api/v1');
     }])
     .factory('User', ['Restify', function(Restify) {
         function User() {

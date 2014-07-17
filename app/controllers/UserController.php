@@ -23,6 +23,7 @@ class UserController extends Controller{
         $this->user = $user;
         $this->registerForm = $registerForm;
         $this->updateForm = $updateForm;
+        
     }
 
     /**
@@ -33,8 +34,7 @@ class UserController extends Controller{
     public function index() 
     {
         $users = $this->user->all();
-        return Response::json($users, 200
-        );
+        return Response::json($users, 200);
     }
 
     

@@ -7,7 +7,7 @@ angular.module('lama.users')
             $scope.error = null;
            
             $scope.save = function() {
-                $http.post('/signin', $scope.user).then(
+                $http.post('/api/v1/signin', $scope.user).then(
                 function(response) {
                     var data = response.data;
                     if(data.success){

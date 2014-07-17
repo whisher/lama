@@ -1,8 +1,7 @@
 <?php namespace Users\User;
 
-use \Config;
-
-use Cartalyst\Sentry\Sentry;
+use \Config,
+    Cartalyst\Sentry\Sentry;
 
 class SentryUser implements UserInterface {
 

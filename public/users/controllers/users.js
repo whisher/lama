@@ -142,7 +142,7 @@ angular.module('lama.users')
     }])
     .controller('UserDeleteCtrl', ['$scope', '$state', 'user', function ($scope, $state, user) {
         $scope.save = function() {
-            return $state.go('users_list');
+            return $state.go('user_actions.list');
         };
         $scope.destroy = function() {
             user.remove().then(

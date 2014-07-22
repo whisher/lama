@@ -5,7 +5,8 @@
 var paths = {
     js: ['Gruntfile.js', 'public/**/*.js', '!public/bower_components/**'],
     html: ['public/**/views/**'],
-    css: ['public/**/css/*.css', '!public/bower_components/**']
+    css: ['public/**/assets/css/*.css', '!public/bower_components/**'],
+    php: ['app/**/*.php', '!vendor/**']
 };
 
 module.exports = function(grunt) {
@@ -15,6 +16,35 @@ module.exports = function(grunt) {
    // Project Configuration
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        assets: grunt.file.readJSON('app/config/assets.json'),
+        watch: {
+            css: {
+                files: paths.css,
+                tasks: ['csslint'],
+                options: {
+                    livereload: true
+                }
+            },
+            html: {
+                files: paths.html,
+                options: {
+                    livereload: true
+                }
+            },
+            js: {
+                files: paths.js,
+                tasks: ['jshint'],
+                options: {
+                    livereload: true
+                }
+            },
+            php: {
+                files: paths.php,
+                options: {
+                    livereload: true
+                }
+            }
+        },
         jshint: {
             all: {
                 src: paths.js,
@@ -23,6 +53,12 @@ module.exports = function(grunt) {
                 }
             }
         },
+        csslint: {
+            options: {
+                csslintrc: '.csslintrc'
+            },
+            src: paths.css
+        },
         php: {
             dist: {
                 options: {
@@ -30,21 +66,27 @@ module.exports = function(grunt) {
                     keepalive: true,
                     open: true
                 }
-            },
-            watch: {
-                 options: {
-                     livereload: true
-                 },
-                 page: {
-                        files: ['*.php', '*.html','*.js','*.css'],
-                        tasks: ['php']
-                 } 
+            }
+        },
+        laravel:{
+           dist:{
+                options: {
+                    hostname: 'lama.io',
+                    keepalive: true,
+                    open: true
+                }
+            }
+        },
+        concurrent: {
+            tasks: ['laravel', 'watch'],
+            options: {
+                logConcurrentOutput: true
             }
         }
     });
-
+ grunt.loadTasks('tasks');  
     //Load NPM tasks
     require('load-grunt-tasks')(grunt);
-    grunt.registerTask('default', ['jshint','php']);
+    grunt.registerTask('default', ['jshint','concurrent']);
 
 };

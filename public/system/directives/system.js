@@ -38,4 +38,27 @@ angular.module('lama.system')
                 });
             }
         };
+    })
+    .directive('lmLoader', function($parse){
+        var tpl = '<div id="loading"><i class="fa fa-spinner fa-spin fa-4x"></i></div>';
+        return {
+            restrict: 'A',
+            scope : {
+                condition: '&'
+            },
+            link: function(scope, element) {
+                element.css('position','relative');
+                scope.$watch('condition()', function(){
+                    var isSubmitted = scope.condition();
+                    if(isSubmitted){
+                       element.append(tpl); 
+                    }
+                    else{
+                        $('#loading').remove();
+                    }
+                    
+                }); 
+            }
+        };
+        
     });

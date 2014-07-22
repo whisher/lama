@@ -8,6 +8,7 @@
         <meta name="author" content="whisher">
         <link rel="shortcut icon" href="<% asset('favicon.ico');  %>">
         <title>Lama</title>
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
         @foreach ($assets['vendor']['css'] as $file)
             <link type="text/css" rel="stylesheet" href="<% asset($file);  %>">
         @endforeach

@@ -24,3 +24,20 @@
     right:-10px;
     top:0;
 }
+
+/* lmLoader directive */
+#loading {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top:0;
+  left:0;
+}
+#loading i.fa {
+  -webkit-animation: spin 1s linear infinite normal;
+  -moz-animation: spin 1s linear infinite normal;
+  -ms-animation: spin 1s linear infinite normal;
+  -o-animation: spin 1s linear infinite normal;
+  animation: spin 1s linear infinite normal;
+}

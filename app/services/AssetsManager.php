@@ -7,7 +7,8 @@ class AssetsManager
 {
     protected $filesystem;
     protected $path;
-
+    
+    
     public function __construct(Filesystem $filesystem) 
     {
         $this->filesystem = $filesystem;
@@ -45,7 +46,7 @@ class AssetsManager
             } 
         }
         else{
-          $pattern= str_replace('public/','',$pattern);
+          
           $files = $this->rglob($pattern); 
         }
         return $files;
@@ -89,13 +90,16 @@ class AssetsManager
     // Does not support flag GLOB_BRACE
     protected function rglob($pattern, $flags = 0) 
     {
+       
+        $pattern= str_replace('public/','',$pattern);
         $files = glob($pattern, $flags);
-        foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir) {
+        $dirs = glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT);
+        foreach ($dirs as $dir) { 
             if(stripos($dir,'bower_components') === false){
-                $files = array_merge($files, $this->rglob($dir.'/'.basename($pattern), $flags));
+               $files = array_merge($files, $this->rglob($dir.'/'.basename($pattern), $flags));
             }
+            
         }
         return $files;
     }
 }
-

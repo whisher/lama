@@ -25,7 +25,9 @@ angular.module('lama.users')
         function($rootScope, $scope, $state, User) {
             $scope.user = {};
             $scope.errors = null;
+            $scope.isSubmitted = false;
             $scope.save = function(){
+                $scope.isSubmitted = true;
                 User.post($scope.user).then(
                     function(data) {
                         if(data.success){
@@ -37,8 +39,12 @@ angular.module('lama.users')
                             return $state.go('session.register-thanks');
                         }
                         $scope.errors = data.errors;
+                        $scope.isSubmitted = false;
                     }
                 );
+            };
+            $scope.registerLoading = function() {
+                return $scope.isSubmitted;
             };
         }
     ])

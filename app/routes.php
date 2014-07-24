@@ -13,7 +13,7 @@ Route::get('/', array('as' => 'home', 'uses' => 'App\Controllers\HomeController@
 Route::group(array('prefix' => 'api/v1', 'before' => 'xhr|xsrf'), function() {
     
     /* Session */
-    Route::post('signin', array('as' => 'session.store', 'uses' => 'App\Controllers\SessionController@store'));
+    Route::post('signin', array('as' => 'session.store', 'uses' => 'App\Controllers\SessionController@store'))->before('issessionedin');
     Route::get('issessionedin', array('before' => 'issessionedin', function(){}));
     Route::get('isloggedin', array('before' => 'isloggedin', function(){}));
     Route::get('hasaccess/{permission}', array('before' => 'hasAccessSession', function(){}));

@@ -23,10 +23,16 @@ LAMA is a boilerplate that provides a nice starting point for Laravel/Sentry and
     php composer.phar install
     chmod -R 0777 app/storage
     configuring your database app/config/database.php
+    set a virtual host 
     php artisan migrate --package=cartalyst/sentry
     php artisan migrate
     php artisan db:seed
     php artisan key:generate
     bower install
     npm install
-    
+
+## Quick Install testing
+    set the project url in tests app/tests/acceptance.suite.yml
+    provide your database test credentials in codeception.yml
+    php artisan migrate --package=cartalyst/sentry --env="testing"
+    php artisan migrate --seed --env="testing"

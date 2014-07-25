@@ -10,3 +10,4 @@ angular.module('lama.system', [])
         $rootScope.$log = $log;
         $rootScope.global = Global;
     }]);
+   

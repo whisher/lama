@@ -29,7 +29,7 @@ class AssetsManager
                         $assets[$groupName][$filetype] = array_merge($assets[$groupName][$filetype], $this->getAssets($value));
                     } else {
                         // Prodution
-                        array_push($assets[$groupName][$filetype], $key);
+                        array_push($assets[$groupName][$filetype],str_replace('public/','',$key));
                     }
                 }
             }
@@ -46,8 +46,7 @@ class AssetsManager
             } 
         }
         else{
-          
-          $files = $this->rglob($pattern); 
+            $files = $this->rglob($pattern); 
         }
         return $files;
     }
@@ -87,19 +86,14 @@ class AssetsManager
         return $data;
     }
     
-    // Does not support flag GLOB_BRACE
     protected function rglob($pattern, $flags = 0) 
     {
-       
         $pattern= str_replace('public/','',$pattern);
+        $pattern = public_path().'/'.$pattern;
         $files = glob($pattern, $flags);
-        $dirs = glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT);
-        foreach ($dirs as $dir) { 
-            if(stripos($dir,'bower_components') === false){
-               $files = array_merge($files, $this->rglob($dir.'/'.basename($pattern), $flags));
-            }
-            
-        }
-        return $files;
+        $func = function($value) {
+            return str_replace(public_path(),'',$value);
+        };
+        return array_map($func,$files);
     }
 }

@@ -66,7 +66,7 @@ angular.module('lama.users')
             controller:'UserCtrl'
         })
         .state('user_actions.suspend', {
-            url: '/user/:id/suspend',
+            url: '/user/:id/suspend/page/:page',
             templateUrl: 'users/views/suspend.html',
             resolve: {
                 user: function(User,$stateParams){

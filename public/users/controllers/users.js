@@ -20,31 +20,7 @@ angular.module('lama.users')
                     }
                 );
             };
-            
-            $scope.ban = function(id){
-                var ban = User.ban(id);
-                ban.put().then(function() {
-                        CurrentPageMemory.set($scope.paginator.getCurrentPage());
-                        return $state.go('user_actions.list',{}, {reload: true});
-                    },
-                    function error(reason) {
-                        throw new Error(reason);
-                    }
-                );
-            };
-            
-            $scope.unBan = function(id){
-                var unban = User.unban(id);
-                unban.put().then(function() {
-                        CurrentPageMemory.set($scope.paginator.getCurrentPage());
-                        return $state.go('user_actions.list',{}, {reload: true});
-                    },
-                    function error(reason) {
-                        throw new Error(reason);
-                    }
-                );
-            };
-        }
+         }
     ])
     .controller('UserInnerCtrl', ['$scope', '$filter',
         function($scope, $filter) {
@@ -83,8 +59,8 @@ angular.module('lama.users')
             };
         }
     ])
-    .controller('UserSuspendCtrl', ['$scope', '$state', 'user', 'User',
-        function($scope, $state, user, User) {
+    .controller('UserSuspendCtrl', ['$scope', '$state', 'user', 'User', 'CurrentPageMemory',
+        function($scope, $state, user, User, CurrentPageMemory) {
             $scope.user =  {};
             var suspend = User.suspend(user.id);
             $scope.errors = null;
@@ -93,6 +69,7 @@ angular.module('lama.users')
                 suspend.put().then(
                     function(data) {
                         if(data.success){
+                            CurrentPageMemory.set($state.params.page);
                             return $state.go('user_actions.list');
                         }
                         $scope.errors = data.errors;

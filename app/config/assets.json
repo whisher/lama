@@ -25,7 +25,17 @@
        "js": {
             "public/build/js/scripts.min.js": [
                 "public/init.js",
-                "public/**/*.js"
+                "public/system/system.js",
+                "public/system/controllers/*.js",
+                "public/system/directives/*.js",
+                "public/system/filters/*.js",
+                "public/system/routes/*.js",
+                "public/system/services/*.js",
+                "public/users/users.js",
+                "public/users/controllers/*.js",
+                "public/users/directives/*.js",
+                "public/users/routes/*.js",
+                "public/users/services/*.js"
             ]
         }
     }

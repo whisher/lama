@@ -6,6 +6,7 @@ composer.lock
 node_modules/
 bootstrap/compiled.php
 public/bower_components
+public/dist
 app/config/local
 .env.*.php
 .env.php

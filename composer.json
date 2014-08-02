@@ -21,8 +21,7 @@
 			"app/tests/TestCase.php"
 		],
                 "psr-0": {
-			"Authority": "app/",
-                        "Users": "app/"
+			"Users": "app/"
 		}
 	},
 	"scripts": {

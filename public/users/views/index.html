@@ -1,6 +1,15 @@
-<div class="well">
-    <a class="btn btn-primary" data-ui-sref="user_actions.create">New</a>
+<div class="well clearfix">
+    <a class="btn btn-primary pull-left" data-ui-sref="user_actions.create">New</a>
+    <form class="form-horizontal pull-right" role="form">
+        <div class="form-group form-no-required">
+          <label class="sr-only" for="search">Search</label>
+          <div class="col-md-12">
+            <input type="text" class="form-control" id="search" placeholder="Search for email and fullname" ng-model="query">
+          </div>
+        </div>
+    </form>
 </div>
+
 <table class="table table-striped" data-ng-if="hasUsers">
     <thead>
         <tr>
@@ -14,7 +23,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr data-ng-controller="UserInnerCtrl" data-ng-repeat="user in paginator.items">
+        <tr data-ng-controller="UserInnerCtrl" data-ng-repeat="user in paginator.items  | filter: search">
             <td>{{user.id}}</td>
             <td>{{user.fullname}}</td>
             <td>{{user.username}}</td>

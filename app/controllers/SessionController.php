@@ -57,4 +57,5 @@ class SessionController extends Controller {
         return Redirect::route('home');
     }
 
+    
 }

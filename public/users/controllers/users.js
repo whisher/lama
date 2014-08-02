@@ -20,6 +20,10 @@ angular.module('lama.users')
                     }
                 );
             };
+           
+            $scope.search = function (row) { 
+                return !!((row.email.indexOf($scope.query || '') !== -1 || row.fullname.indexOf($scope.query || '') !== -1));
+            };
          }
     ])
     .controller('UserInnerCtrl', ['$scope', '$filter',

@@ -91,6 +91,11 @@ module.exports = function(grunt) {
             productionScripts: {
                 files: '<%= assets.scripts.js %>'
             }
+        },
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js'
+            }
         }
     });
     
@@ -99,5 +104,6 @@ module.exports = function(grunt) {
     
     grunt.registerTask('default', ['jshint','concurrent']);
     grunt.registerTask('prod', ['clean', 'concat', 'cssmin','uglify']);
- 
+    grunt.registerTask('test', ['karma:unit']);
+
 };

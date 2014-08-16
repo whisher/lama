@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('lama.users')
-    .controller('SessionSigninCtrl', ['$scope', '$rootScope', '$http', '$state',
+    .controller('SessionSigninController', ['$scope', '$rootScope', '$http', '$state',
         function($scope, $rootScope, $http, $state) {
             $scope.user = {};
-            $scope.error = null;
+            $scope.errors = [];
            
             $scope.save = function() {
                 $http.post('/api/v1/signin', $scope.user).then(
@@ -21,10 +21,10 @@ angular.module('lama.users')
             };
         }
     ])
-    .controller('SessionRegisterCtrl', ['$rootScope', '$scope', '$state', 'User',
+    .controller('SessionRegisterController', ['$rootScope', '$scope', '$state', 'User',
         function($rootScope, $scope, $state, User) {
             $scope.user = {};
-            $scope.errors = null;
+            $scope.errors = [];
             $scope.isSubmitted = false;
             $scope.save = function(){
                 $scope.isSubmitted = true;
@@ -48,7 +48,7 @@ angular.module('lama.users')
             };
         }
     ])
-    .controller('SessionForgotPasswordCtrl', ['$scope', '$state', 'User',
+    .controller('SessionForgotPasswordController', ['$scope', '$state', 'User',
         function($scope, $state, User) {
             $scope.user = {};
             $scope.errors = null;

@@ -17,17 +17,17 @@ angular.module('lama.users')
             .state('session.signin', {
                 url: '/user/signin',
                 templateUrl: 'users/views/signin.html',
-                controller:'SessionSigninCtrl'
+                controller:'SessionSigninController'
              })
             .state('session.register', {
                 url: '/user/register',
                 templateUrl: 'users/views/register.html',
-                controller:'SessionRegisterCtrl'
+                controller:'SessionRegisterController'
             })
             .state('session.password', {
                 url: '/user/forgot-password',
                 templateUrl: 'users/views/forgot-password.html',
-                controller:'SessionForgotPasswordCtrl'
+                controller:'SessionForgotPasswordController'
             })
             .state('session.register-thanks', {
                 url: '/user/register-thanks',
@@ -36,6 +36,10 @@ angular.module('lama.users')
             .state('session.forgot-thanks', {
                 url: '/user/forgot-thanks',
                 templateUrl: 'users/views/forgot-thanks.html'
+            })
+            .state('session.reset-thanks', {
+                url: '/user/reset-thanks',
+                templateUrl: 'users/views/reset-thanks.html'
             });
         }
     ]);

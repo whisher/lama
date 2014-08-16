@@ -8,7 +8,8 @@ angular.module('lama.system')
             $stateProvider              
             .state('home', {
                 url: '/',
-                templateUrl: 'system/views/home.html'
+                templateUrl: 'system/views/home.html',
+                controller:'SystemController'
             });
         }
     ])

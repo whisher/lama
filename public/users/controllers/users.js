@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('lama.users')
-    .controller('UserCtrl', ['$scope', '$state', 'users', 'User','Paginator','CurrentPageMemory',
+    .controller('UserController', ['$scope', '$state', 'users', 'User','Paginator','CurrentPageMemory',
         function($scope, $state, users, User, Paginator, CurrentPageMemory) {
             
             $scope.hasUsers = users.length > 0;
@@ -26,14 +26,14 @@ angular.module('lama.users')
             };
          }
     ])
-    .controller('UserInnerCtrl', ['$scope', '$filter',
+    .controller('UserInnerController', ['$scope', '$filter',
         function($scope, $filter) {
             $scope.user.created_at = $filter('tsToDate')($scope.user.created_at,'shortDate'); 
             $scope.user.showSuspend = $scope.user.active && !$scope.user.banned;
             $scope.user.showUnSuspend = !$scope.user.active && !$scope.user.banned;
         }
     ])
-    .controller('UserParentActionsCtrl', ['$scope',
+    .controller('UserParentActionsController', ['$scope',
         function($scope) {
          //http://stackoverflow.com/a/19633860/356380
          $scope.someSelected = function (object) {
@@ -43,7 +43,7 @@ angular.module('lama.users')
             }; 
         }
     ])
-    .controller('UserCreateCtrl', ['$scope', '$state', 'groups', 'User',
+    .controller('UserCreateController', ['$scope', '$state', 'groups', 'User',
         function($scope, $state, groups, User) {
             $scope.groups = groups;
             $scope.user = {};
@@ -63,7 +63,7 @@ angular.module('lama.users')
             };
         }
     ])
-    .controller('UserSuspendCtrl', ['$scope', '$state', 'user', 'User', 'CurrentPageMemory',
+    .controller('UserSuspendController', ['$scope', '$state', 'user', 'User', 'CurrentPageMemory',
         function($scope, $state, user, User, CurrentPageMemory) {
             $scope.user =  {};
             var suspend = User.suspend(user.id);
@@ -82,7 +82,7 @@ angular.module('lama.users')
             };
         }
     ])
-    .controller('UserEditCtrl', ['$scope', '$state', 'groups', 'user', 'User', 
+    .controller('UserEditController', ['$scope', '$state', 'groups', 'user', 'User', 
         function ($scope, $state, groups, user, User) {
             $scope.groups = groups;
             $scope.user = user;
@@ -121,7 +121,7 @@ angular.module('lama.users')
                 );
             };
     }])
-    .controller('UserDeleteCtrl', ['$scope', '$state', 'user', function ($scope, $state, user) {
+    .controller('UserDeleteController', ['$scope', '$state', 'user', function ($scope, $state, user) {
         $scope.save = function() {
             return $state.go('user_actions.list');
         };
@@ -136,7 +136,7 @@ angular.module('lama.users')
                 );
         };
     }])
-    .controller('UserAccountCtrl', ['$rootScope', '$scope', '$state', 'user', 'User',
+    .controller('UserAccountController', ['$rootScope', '$scope', '$state', 'user', 'User',
         function($rootScope, $scope, $state, user, User) {
             $scope.user =  user;
             var account = User.account($scope.user.id);
@@ -157,7 +157,7 @@ angular.module('lama.users')
             };
         }
     ])
-    .controller('UserPasswordCtrl', ['$rootScope', '$scope', '$state', 'user', 'User',
+    .controller('UserPasswordController', ['$rootScope', '$scope', '$state', 'user', 'User',
         function($rootScope, $scope, $state, user, User) {
             $scope.user =  {};
             var password = User.password(user.id);

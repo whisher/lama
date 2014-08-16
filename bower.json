@@ -10,6 +10,7 @@
     "restangular": "~1.4.0"
   },
   "devDependencies": {
-    "html5shiv": "~3.7.2"
+    "html5shiv": "~3.7.2",
+    "angular-mocks": "~1.2.22"
   }
 }

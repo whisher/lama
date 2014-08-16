@@ -32,13 +32,13 @@ module.exports = function (grunt) {
                 checkServer(hostname, port, cb);
             }).on('error', function (err) {
                 // back off after 1s
-                if (++checkServerTries > 20) {
+                if (++checkServerTries > 30) {
                     return cb();
                 }
 
                 checkServer(hostname, port, cb);
             }).end();
-        }, 50);
+        }, 100);
     }
 
     grunt.registerMultiTask('laravel', 'Serving Laravel', function () {

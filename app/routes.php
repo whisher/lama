@@ -10,6 +10,7 @@ Blade::setEscapedContentTags('<%%', '%%>'); // for escaped data
 /* Index */
 Route::get('/', array('as' => 'home', 'uses' => 'App\Controllers\HomeController@index'));
 
+
 Route::group(array('prefix' => 'api/v1', 'before' => 'xhr|xsrf'), function() {
     
     /* Session */
@@ -17,7 +18,7 @@ Route::group(array('prefix' => 'api/v1', 'before' => 'xhr|xsrf'), function() {
     Route::get('issessionedin', array('before' => 'issessionedin', function(){}));
     Route::get('isloggedin', array('before' => 'isloggedin', function(){}));
     Route::get('hasaccess/{permission}', array('before' => 'hasAccessSession', function(){}));
-    
+    /* FIX base and edit */
     /* User */
     Route::post('user', array('as' => 'base.user.register', 'uses' => 'App\Controllers\UserController@register'))->before('issessionedin');
     Route::post('user/create', array('as' => 'base.user.create', 'uses' => 'App\Controllers\UserController@create'))->before('hasAccess:users');
@@ -31,7 +32,6 @@ Route::group(array('prefix' => 'api/v1', 'before' => 'xhr|xsrf'), function() {
     Route::put('user/{id}/suspend', array('as' => 'base.user.suspend', 'uses' => 'App\Controllers\UserController@suspend'))->where('id', '[0-9]+')->before('hasAccess:users');
     Route::put('user/{id}/unsuspend', array('as' => 'base.user.unsuspend', 'uses' => 'App\Controllers\UserController@unsuspend'))->where('id', '[0-9]+')->before('hasAccess:users');
     Route::put('user/{id}/ban', array('as' => 'base.user.ban', 'uses' => 'App\Controllers\UserController@ban'))->where('id', '[0-9]+')->before('hasAccess:users');
-    Route::put('user/{id}/unban', array('as' => 'base.user.unban', 'uses' => 'App\Controllers\UserController@unban'))->where('id', '[0-9]+')->before('hasAccess:users');
     Route::delete('user/{id}', array('as' => 'base.user.destroy', 'uses' => 'App\Controllers\UserController@destroy'))->where('id', '[0-9]+')->before('hasAccess:users');
  
     /* group */

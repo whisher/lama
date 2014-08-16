@@ -23,7 +23,7 @@ angular.module('lama.users')
                     return User.get($stateParams.id);
                 }
             },
-            controller:'UserAccountCtrl'
+            controller:'UserAccountController'
         })
         .state('users.password', {
             url: '/user/password/:id',
@@ -33,7 +33,7 @@ angular.module('lama.users')
                     return User.get($stateParams.id);
                 }
             },
-            controller:'UserPasswordCtrl'
+            controller:'UserPasswordController'
         })
         .state('user_actions', {
             abstract: true,
@@ -43,7 +43,7 @@ angular.module('lama.users')
                     return Session.hasAccess('users');
                 } 
             },
-            controller:'UserParentActionsCtrl'
+            controller:'UserParentActionsController'
         })
         .state('user_actions.create', {
             url: '/user/create',
@@ -53,7 +53,7 @@ angular.module('lama.users')
                    return Group.getList();
                 }
             },
-            controller:'UserCreateCtrl'
+            controller:'UserCreateController'
         })
         .state('user_actions.list', {
             url: '/users',
@@ -63,7 +63,7 @@ angular.module('lama.users')
                    return User.getList();
                 }
             },
-            controller:'UserCtrl'
+            controller:'UserController'
         })
         .state('user_actions.suspend', {
             url: '/user/:id/suspend/page/:page',
@@ -73,7 +73,7 @@ angular.module('lama.users')
                     return User.get($stateParams.id);
                 }
             },
-            controller:'UserSuspendCtrl'
+            controller:'UserSuspendController'
         })
         .state('user_actions.edit', {
             url: '/user/:id/edit',
@@ -86,7 +86,7 @@ angular.module('lama.users')
                     return User.get($stateParams.id);
                 }
             },
-            controller:'UserEditCtrl'
+            controller:'UserEditController'
         })
         .state('user_actions.delete', {
             url: '/user/:id/delete',
@@ -96,7 +96,7 @@ angular.module('lama.users')
                     return User.get($stateParams.id);
                 }
             },
-            controller:'UserDeleteCtrl'
+            controller:'UserDeleteController'
         });
             
     }]);

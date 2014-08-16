@@ -35,3 +35,7 @@ LAMA is a boilerplate that provides a nice starting point for Laravel/Sentry and
     provide your database test credentials in codeception.yml
     php artisan migrate --package=cartalyst/sentry --env="testing"
     php artisan migrate --seed --env="testing"
+
+## TODO
+   bug reset password too much info
+   rename User

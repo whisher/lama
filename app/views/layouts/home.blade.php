@@ -4,8 +4,11 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="LAMB is a boilerplate that provides a nice starting point for Laravel and AngularJS based applications">
+        <meta name="title" content="lama">
+        <meta name="description" content="LAMA is a boilerplate that provides a nice starting point for Laravel and AngularJS based applications">
         <meta name="author" content="whisher">
+        <meta name="keywords" content="">
+        <meta name="description" content="">
         <link rel="shortcut icon" href="<% asset('favicon.ico');  %>">
         <title>Lama</title>
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">

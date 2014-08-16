@@ -88,15 +88,6 @@
     public function ban($id);
     
     /**
-     * Un-Ban an user
-     * 
-     * @param  int $id 
-     * 
-     * @return Array     
-     */
-    public function unBan($id);
-    
-    /**
      * Attempt activation for the specified user
      * 
      * @param  int $id   

@@ -199,7 +199,7 @@ class UserController extends Controller{
             $result = $this->user->forgot($this->updateForm->data());
             if (isset($result['user']) && ($result['success'] > 0)) {
                 Event::fire('user.mail.forgot', array('data'=>$result['user']));
-                return Response::json($result,200);
+                return Response::json(array('success'=>1),200);
             } 
             $error = isset($result['error'])?array_pop($result):trans('user.generror');
             return Response::json(array(
@@ -227,7 +227,7 @@ class UserController extends Controller{
         $result = $this->user->resetPassword($id, $code);
         if (isset($result['user']) && ($result['success'] > 0)) {
             Event::fire('user.mail.newpassword',array('data'=>$result['user']));
-            return Redirect::route('base.user.newpassword');
+            return Redirect::to(\URL::route('home') . "/#!/user/reset-thanks");
         } 
         return View::make('errors.404');
     }
@@ -314,22 +314,6 @@ class UserController extends Controller{
     public function ban($id) 
     {
         $result = $this->user->ban($id);
-        if ($result['success'] > 0) {
-            return Response::json($result,200);
-        } 
-        return Response::make('Not Found', 404);
-    }
-
-    /**
-     * Unban an user
-     * 
-     * @param  int $id 
-     * 
-     * @return Redirect     
-     */
-    public function unban($id) 
-    {
-        $result = $this->user->unBan($id);
         if ($result['success'] > 0) {
             return Response::json($result,200);
         } 

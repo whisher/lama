@@ -17,6 +17,8 @@ angular.module('lama.system')
             }
             ];
 
+            $scope.menus = [];
+            
             function queryMenu(menus) {
                 Menus.query(menus).then(
                     function (result) {

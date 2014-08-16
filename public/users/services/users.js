@@ -1,6 +1,6 @@
 'use strict';
 
-//Articles service used for articles REST endpoint
+//User service used for articles REST endpoint
 angular.module('lama.users')
     .config(['RestangularProvider',function(RestangularProvider) {
         RestangularProvider.setBaseUrl('/api/v1');

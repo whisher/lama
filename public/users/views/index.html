@@ -20,6 +20,7 @@
             <th>Status</th>
             <th>Joined</th>
             <th>Groups</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -38,7 +39,7 @@
                 </ul>
             </td>
             <td>
-                <a class="btn btn-warning btn-sm" user-manager-status user-data="user">
+                <a class="btn btn-warning btn-sm" lama-user-banner current-user="user">
                     <span class="glyphicon glyphicon-warning-sign"></span> Ban
                 </a>
                 <a data-ng-if="user.showSuspend" data-ui-sref="user_actions.suspend({ id: user.id,page:paginator.getCurrentPage() })" class="btn btn-warning btn-sm">

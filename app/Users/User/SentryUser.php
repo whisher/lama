@@ -364,39 +364,17 @@ class SentryUser implements UserInterface {
         try {
             // Find the user using the user id
             $throttle = $this->sentry->findThrottlerByUserId($id);
-            // Ban the user
-            $throttle->ban();
+            $result['ban'] = 0;
+            if ($throttle->isBanned()) {
+                 $throttle->unBan();
+            }
+            else{
+               $result['ban'] = 1;
+               $throttle->ban(); 
+            }
             $result['success'] = 1;
         } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
-            $result['message'] = trans('user.notfound');
-        }catch (\Illuminate\Database\QueryException $e) {
-            $result['error'] = trans('user.querror');
-        } catch (\Exception $e) {
-            $result['error'] = trans('user.generror');
-        }
-        return $result;
-    }
-
-    /**
-     * Un-Ban an user
-     * 
-     * @param  int $id 
-     * 
-     * @return Array     
-     */
-    public function unBan($id)
-    {
-        $result = array('success' => 0);
-        try {
-            // Find the user using the user id
-            $throttle = $this->sentry->findThrottlerByUserId($id);
-            // Unban the user
-            $throttle->unBan();
-            $result['success'] = 1;
-            $result['message'] = trans('user.unbanned');
-        } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
-            $result['success'] = false;
-            $result['message'] = trans('user.notfound');
+            $result['error'] = trans('user.notfound');
         }catch (\Illuminate\Database\QueryException $e) {
             $result['error'] = trans('user.querror');
         } catch (\Exception $e) {
@@ -453,7 +431,7 @@ class SentryUser implements UserInterface {
         try {
             // Find the user
             $user = $this->sentry->getUserProvider()->findById($id);
-            $newPassword = $this->_generatePassword(8, 8);
+            $newPassword = $this->generatePassword(8, 8);
             // Attempt to reset the user password
             if ($user->attemptResetPassword($code, $newPassword)) {
                 // Email the reset code to the user

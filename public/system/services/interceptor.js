@@ -1,27 +1,25 @@
 'use strict';
 
 angular.module('lama.system')
-    .factory('httpInterceptor', ['$q','$location',function ($q,$location) {
+    .factory('httpInterceptor', ['$q', '$location',function ($q, $location) {
+        var canceller = $q.defer();
         return {
+            'request': function(config) {
+                // promise that should abort the request when resolved.
+                config.timeout = canceller.promise;
+                return config;
+            },
             'response': function(response) {
-                if (response.status === 401) {
-                    $location.url('/user/signin');
-                    return $q.reject(response);
-                }
-                if (response.status === 403) {
-                    $location.url('/');
-                    return $q.reject(response);
-                }
-                return response || $q.when(response);
+                return response;
             },
             'responseError': function(rejection) {
                 if (rejection.status === 401) {
+                    canceller.resolve('Unauthorized'); 
                     $location.url('/user/signin');
-                    return $q.reject(rejection);
                 }
                 if (rejection.status === 403) {
+                    canceller.resolve('Forbidden');  
                     $location.url('/');
-                    return $q.reject(rejection);
                 }
                 return $q.reject(rejection);
             }

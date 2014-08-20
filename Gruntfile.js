@@ -3,7 +3,7 @@
 
 
 var paths = {
-    js: ['Gruntfile.js', 'tasks/laravel.js', 'public/**/*.js', '!public/build/**', '!public/bower_components/**'],
+    js: ['Gruntfile.js', 'tasks/laravel.js', 'public/**/*.js','!public/**/tests/**', '!public/build/**', '!public/bower_components/**'],
     html: ['public/**/views/**'],
     css: ['public/**/assets/css/*.css', '!public/bower_components/**'],
     php: ['app/**/*.php', '!vendor/**']

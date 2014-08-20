@@ -12,9 +12,4 @@ angular.module('lama.system')
                 controller:'SystemController'
             });
         }
-    ])
-    .config(['$locationProvider',
-        function($locationProvider) {
-            $locationProvider.hashPrefix('!');
-        }
     ]);

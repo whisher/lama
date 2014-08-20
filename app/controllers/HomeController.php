@@ -13,6 +13,7 @@ class HomeController extends BaseController
     
     public function index()
     {   
+        
         $assetsManager = new AssetsManager(new Filesystem());
         $assets = $assetsManager->assets();
         $userData = array();

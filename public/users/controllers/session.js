@@ -11,8 +11,8 @@ angular.module('lama.users')
                 function(response) {
                     var data = response.data;
                     if(data.success){
-                        $rootScope.global.user = data.user;
-                        $rootScope.$emit('loggedin');
+                       // $rootScope.global.user = data.user;
+                        $rootScope.$emit('loggedin',data.user);
                         return $state.go('home');
                     }
                     $scope.errors = data.errors;
@@ -31,9 +31,8 @@ angular.module('lama.users')
                 User.post($scope.user).then(
                     function(data) {
                         if(data.success){
-                            if(data.logged > 0){
-                                $rootScope.global.user = data.user;
-                                $rootScope.$emit('loggedin');
+                            if(data.logged > 0){//$rootScope.global.user = data.user;
+                                $rootScope.$emit('loggedin',data.user);
                                 return $state.go('home');
                             }
                             return $state.go('session.register-thanks');

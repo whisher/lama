@@ -1,29 +1,51 @@
 'use strict';
-
-(function() {
+beforeEach(function() {
+                module('lama');
+                module('lama.system');
+                module('stateMock');
+            });
+var $httpBackend,$state;
+beforeEach(inject(function( _$httpBackend_, _$state_) {
+    $httpBackend = _$httpBackend_;
+    $httpBackend.when('GET', '/api/v1/user/menus',[]).respond(200,{});
+    $httpBackend.flush();
+    $state = _$state_;
+    $state.expectTransitionTo('home');
+}));
+afterEach(function() {
+    $httpBackend.verifyNoOutstandingExpectation();
+    $httpBackend.verifyNoOutstandingRequest();
+});
+/*(function() {*/
     describe('Unit test: system module', function () {
         describe('SystemController', function () {
 
             // load the controller's module
-            beforeEach(function() {
+           beforeEach(function() {
                 module('lama');
                 module('stateMock');
             });
 
             var SystemController,
             $rootScope,
-            $scope;
-            window.user = {};
+            $scope,
+            $httpBackend,
+            $state;
+
+            
             // Initialize the controller and a mock scope
-            beforeEach(inject(function ($controller, _$rootScope_) {
+            beforeEach(inject(function ($controller, _$rootScope_, _$httpBackend_,_$state_) {
                 $rootScope = _$rootScope_;
                 $scope = _$rootScope_.$new();
+                $httpBackend = _$httpBackend_;
                 SystemController = $controller('SystemController', {
                     $scope: $scope
                 });
+                $state = _$state_;
             }));
 
             it('should attach a list of awesomeThings to the scope', function () {
+               // $state.expectTransitionTo('home');
                 expect($scope.test.length).toBe(0);
             });
 
@@ -31,47 +53,6 @@
                 expect($rootScope.global).toBeTruthy();
             });
         });
-        describe('HeaderController', function () {
-
-            // load the controller's module
-            beforeEach(function() {
-                module('lama');
-                module('stateMock');
-            });
-
-            var HeaderController,
-            $rootScope,
-            $scope,
-            $httpBackend,
-            $location,
-            $state;
-            // Initialize the controller and a mock scope
-            beforeEach(inject(function ($controller,_$rootScope_, _$state_,_$httpBackend_) {
-                $httpBackend = _$httpBackend_;
-                
- 
-                $rootScope = _$rootScope_;
-                $scope = _$rootScope_.$new();
-                HeaderController = $controller('HeaderController', {
-                    $scope: $scope
-                });
-                
-                $state = _$state_;
-                
-            }));
-afterEach(function() {
-             // $httpBackend.verifyNoOutstandingExpectation();
-              // $httpBackend.verifyNoOutstandingRequest();
-            });
-            it('should attach a menu to the scope', function () {
-                //$state.expectTransitionTo('home');
-               // $httpBackend.when('GET', '/api/v1/user/menus').respond([{permission: null, title: 'Home', link:'home'}]);
-                //$httpBackend.flush();
-                //console.log($scope.menus);
-               // expect($scope.menus.length).toBe(1);
-            });
-
-           
-        });
+        
     });
-}());
+/*}());*/

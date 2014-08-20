@@ -50,6 +50,8 @@ Route::get('user/newpassword', array('as' => 'base.user.newpassword', function()
 	return View::make('users.newpassword');
 }));
 
+
+
 /* Session */
 Route::get('logout', array('as' => 'session.destroy', 'uses' => 'App\Controllers\SessionController@destroy'));
 

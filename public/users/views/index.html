@@ -24,7 +24,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr data-ng-controller="UserInnerCtrl" data-ng-repeat="user in paginator.items  | filter: search">
+        <tr data-ng-controller="UserInnerController" data-ng-repeat="user in paginator.items  | filter: search">
             <td>{{user.id}}</td>
             <td>{{user.fullname}}</td>
             <td>{{user.username}}</td>

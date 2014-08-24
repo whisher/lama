@@ -8,7 +8,7 @@ use \Controller,
 use Users\Group\GroupInterface;
 
 
-class GroupController extends Controller{
+class GroupsController extends Controller{
 
     protected $group;
    

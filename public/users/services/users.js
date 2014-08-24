@@ -1,12 +1,12 @@
 'use strict';
 
-//User service used for articles REST endpoint
+//Users service used for articles REST endpoint
 angular.module('lama.users')
     .config(['RestangularProvider',function(RestangularProvider) {
         RestangularProvider.setBaseUrl('/api/v1');
     }])
-    .factory('User', ['Restify', function(Restify) {
-        function User() {
+    .factory('Users', ['Restify', function(Restify) {
+        function Users() {
             this.account = function(id){
                 return this.one(id).one('account');
             };
@@ -36,9 +36,5 @@ angular.module('lama.users')
             };
             
         }
-        return angular.extend(Restify('user'), new User());
-    }])
-   .factory('Group', ['Restify', function(Restify) {
-        function Group() {}
-        return angular.extend(Restify('group'), new Group());
+        return angular.extend(Restify('users'), new Users());
     }]);

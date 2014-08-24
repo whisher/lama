@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('lama.users')
-    .controller('UserController', ['$scope', '$state', 'users', 'User','Paginator','CurrentPageMemory',
-        function($scope, $state, users, User, Paginator, CurrentPageMemory) {
+    .controller('UserController', ['$scope', '$state', 'users', 'Users','Paginator','CurrentPageMemory',
+        function($scope, $state, users, Users, Paginator, CurrentPageMemory) {
             
             $scope.hasUsers = users.length > 0;
             $scope.paginator =  Paginator(2,5,users);
@@ -10,7 +10,7 @@ angular.module('lama.users')
                 $scope.paginator.toPageId(CurrentPageMemory.get());
             }
             $scope.unSuspend = function(id){
-                var unsuspend = User.unsuspend(id);
+                var unsuspend = Users.unsuspend(id);
                 unsuspend.put().then(function() {
                         CurrentPageMemory.set($scope.paginator.getCurrentPage());
                         return $state.go('user_actions.list',{}, {reload: true});
@@ -43,8 +43,8 @@ angular.module('lama.users')
             }; 
         }
     ])
-    .controller('UserCreateController', ['$scope', '$state', 'groups', 'User',
-        function($scope, $state, groups, User) {
+    .controller('UserCreateController', ['$scope', '$state', 'groups', 'Users',
+        function($scope, $state, groups, Users) {
             $scope.groups = groups;
             $scope.user = {};
             $scope.user.groups = {};
@@ -63,10 +63,10 @@ angular.module('lama.users')
             };
         }
     ])
-    .controller('UserSuspendController', ['$scope', '$state', 'user', 'User', 'CurrentPageMemory',
-        function($scope, $state, user, User, CurrentPageMemory) {
+    .controller('UserSuspendController', ['$scope', '$state', 'user', 'Users', 'CurrentPageMemory',
+        function($scope, $state, user, Users, CurrentPageMemory) {
             $scope.user =  {};
-            var suspend = User.suspend(user.id);
+            var suspend = Users.suspend(user.id);
             $scope.errors = null;
             $scope.save = function(){
                 suspend.minutes = $scope.user.minutes;
@@ -82,8 +82,8 @@ angular.module('lama.users')
             };
         }
     ])
-    .controller('UserEditController', ['$scope', '$state', 'groups', 'user', 'User', 
-        function ($scope, $state, groups, user, User) {
+    .controller('UserEditController', ['$scope', '$state', 'groups', 'user', 'Users', 
+        function ($scope, $state, groups, user, Users) {
             $scope.groups = groups;
             $scope.user = user;
             var userHasGroup = {};
@@ -97,7 +97,7 @@ angular.module('lama.users')
                }
             },userHasGroup);
             $scope.user.groups = userHasGroup;
-            var edit = User.edit($scope.user.id);
+            var edit = Users.edit($scope.user.id);
             $scope.errors = null;
             $scope.save = function(){
                 edit.fullname = $scope.user.fullname;
@@ -136,10 +136,10 @@ angular.module('lama.users')
                 );
         };
     }])
-    .controller('UserAccountController', ['$rootScope', '$scope', '$state', 'user', 'User',
-        function($rootScope, $scope, $state, user, User) {
+    .controller('UserAccountController', ['$rootScope', '$scope', '$state', 'user', 'Users',
+        function($rootScope, $scope, $state, user, Users) {
             $scope.user =  user;
-            var account = User.account($scope.user.id);
+            var account = Users.account($scope.user.id);
             $scope.errors = null;
             $scope.save = function(){
                 account.fullname = $scope.user.fullname;
@@ -157,10 +157,10 @@ angular.module('lama.users')
             };
         }
     ])
-    .controller('UserPasswordController', ['$rootScope', '$scope', '$state', 'user', 'User',
-        function($rootScope, $scope, $state, user, User) {
+    .controller('UserPasswordController', ['$rootScope', '$scope', '$state', 'user', 'Users',
+        function($rootScope, $scope, $state, user, Users) {
             $scope.user =  {};
-            var password = User.password(user.id);
+            var password = Users.password(user.id);
             $scope.errors = null;
             $scope.save = function(){
                 password.old_password = $scope.old_password;

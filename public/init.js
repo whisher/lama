@@ -23,7 +23,7 @@ angular.module('lama', ['ui.router','restangular','lama.system','lama.users'])
         },
         {
             'permission': 'users',
-            'title': 'User',
+            'title': 'Users',
             'link': 'user_actions.list'
         }
         ];

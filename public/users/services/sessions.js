@@ -2,7 +2,7 @@
 
 //Service for session status
 angular.module('lama.users')
-    .factory('Session', ['$http',
+    .factory('Sessions', ['$http',
         function($http) {
             return{
                 isSessionedIn :function() {

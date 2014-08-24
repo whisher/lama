@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('lama.users')
-    .directive('lamaUserBanner',function(User) {
+    .directive('lamaUserBanner',function(Users) {
         return {
             restrict: 'A',
             scope:{
@@ -9,7 +9,7 @@ angular.module('lama.users')
             },
             controller:function($scope){
                 $scope.ban = function(id){
-                    var ban = User.ban(id);
+                    var ban = Users.ban(id);
                     return ban.put();
                 };
             },

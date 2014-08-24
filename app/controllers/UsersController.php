@@ -12,7 +12,7 @@ use Users\User\UserInterface;
 use Users\Form\Register\RegisterForm;
 use Users\Form\Update\UpdateForm;
 
-class UserController extends Controller{
+class UsersController extends Controller{
 
     protected $user;
     protected $registerForm;

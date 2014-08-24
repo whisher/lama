@@ -6,7 +6,7 @@ use \Controller,
     \Response,
     Users\Menu\MenuInterface;
     
-class MenuController extends Controller
+class MenusController extends Controller
 {
     protected $menu;
     public function __construct(MenuInterface $menu) 

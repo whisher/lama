@@ -10,7 +10,7 @@ use \Controller,
 use Users\Session\SessionInterface;
 use Users\Form\Signin\SigninForm;
 
-class SessionController extends Controller {
+class SessionsController extends Controller {
 
     protected $session;
     protected $signinForm;

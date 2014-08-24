@@ -21,14 +21,14 @@ angular.module('lama.users')
             };
         }
     ])
-    .controller('SessionRegisterController', ['$rootScope', '$scope', '$state', 'User',
-        function($rootScope, $scope, $state, User) {
+    .controller('SessionRegisterController', ['$rootScope', '$scope', '$state', 'Users',
+        function($rootScope, $scope, $state, Users) {
             $scope.user = {};
             $scope.errors = [];
             $scope.isSubmitted = false;
             $scope.save = function(){
                 $scope.isSubmitted = true;
-                User.post($scope.user).then(
+                Users.post($scope.user).then(
                     function(data) {
                         if(data.success){
                             if(data.logged > 0){//$rootScope.global.user = data.user;
@@ -47,12 +47,12 @@ angular.module('lama.users')
             };
         }
     ])
-    .controller('SessionForgotPasswordController', ['$scope', '$state', 'User',
-        function($scope, $state, User) {
+    .controller('SessionForgotPasswordController', ['$scope', '$state', 'Users',
+        function($scope, $state, Users) {
             $scope.user = {};
             $scope.errors = null;
             $scope.save = function(){
-                User.forgot($scope.user).then(
+                Users.forgot($scope.user).then(
                     function(data) {
                         if(data.success){
                             return $state.go('session.forgot-thanks');

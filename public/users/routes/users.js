@@ -10,8 +10,8 @@ angular.module('lama.users')
             abstract: true,
             templateUrl: 'users/views/users.html',
             resolve: {
-                issessionedin: function(Session){
-                    return Session.isLoggedIn();
+                issessionedin: function(Sessions){
+                    return Sessions.isLoggedIn();
                 } 
             }
         })
@@ -19,8 +19,8 @@ angular.module('lama.users')
             url: '/user/account/:id',
             templateUrl: 'users/views/account.html',
             resolve: {
-                user: function(User, $stateParams){
-                    return User.get($stateParams.id);
+                user: function(Users, $stateParams){
+                    return Users.get($stateParams.id);
                 }
             },
             controller:'UserAccountController'
@@ -29,8 +29,8 @@ angular.module('lama.users')
             url: '/user/password/:id',
             templateUrl: 'users/views/password.html',
             resolve: {
-                user: function(User, $stateParams){
-                    return User.get($stateParams.id);
+                user: function(Users, $stateParams){
+                    return Users.get($stateParams.id);
                 }
             },
             controller:'UserPasswordController'
@@ -39,8 +39,8 @@ angular.module('lama.users')
             abstract: true,
             templateUrl: 'users/views/actions.html',
             resolve: {
-                hasaccess: function(Session){
-                    return Session.hasAccess('users');
+                hasaccess: function(Sessions){
+                    return Sessions.hasAccess('users');
                 } 
             },
             controller:'UserParentActionsController'
@@ -49,8 +49,8 @@ angular.module('lama.users')
             url: '/user/create',
             templateUrl: 'users/views/create.html',
             resolve: {
-                groups: function(Group){
-                   return Group.getList();
+                groups: function(Groups){
+                   return Groups.getList();
                 }
             },
             controller:'UserCreateController'
@@ -59,8 +59,8 @@ angular.module('lama.users')
             url: '/users',
             templateUrl: 'users/views/index.html',
             resolve: {
-                users: function(User){
-                   return User.getList();
+                users: function(Users){
+                   return Users.getList();
                 }
             },
             controller:'UserController'
@@ -69,8 +69,8 @@ angular.module('lama.users')
             url: '/user/:id/suspend/page/:page',
             templateUrl: 'users/views/suspend.html',
             resolve: {
-                user: function(User,$stateParams){
-                    return User.get($stateParams.id);
+                user: function(Users,$stateParams){
+                    return Users.get($stateParams.id);
                 }
             },
             controller:'UserSuspendController'
@@ -79,11 +79,11 @@ angular.module('lama.users')
             url: '/user/:id/edit',
             templateUrl: 'users/views/edit.html',
             resolve: {
-                groups: function(Group){
-                   return Group.getList();
+                groups: function(Groups){
+                   return Groups.getList();
                 },
-                user: function(User,$stateParams){
-                    return User.get($stateParams.id);
+                user: function(Users,$stateParams){
+                    return Users.get($stateParams.id);
                 }
             },
             controller:'UserEditController'
@@ -92,8 +92,8 @@ angular.module('lama.users')
             url: '/user/:id/delete',
             templateUrl: 'users/views/delete.html',
             resolve: {
-                user: function(User,$stateParams){
-                    return User.get($stateParams.id);
+                user: function(Users,$stateParams){
+                    return Users.get($stateParams.id);
                 }
             },
             controller:'UserDeleteController'

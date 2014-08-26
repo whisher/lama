@@ -1,0 +1,10 @@
+<?php $__env->startSection('content'); ?>
+<div class="jumbotron">
+  <p class="text-primary">
+    A new password has been sent to you.<br>
+    Thanks.
+  </p>
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.home', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

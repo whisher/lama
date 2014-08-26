@@ -54,16 +54,23 @@ class SentrySession implements SessionInterface {
                 'username' => $user->getUsername(),
                 'groups'=>$groups);
         } 
-        catch (\Cartalyst\Sentry\Throttling\UserSuspendedException $e) {
+        catch (\Cartalyst\Sentry\Users\LoginRequiredException $e) {
+            $result['error'] = trans('session.loginrequired');
+        } catch (\Cartalyst\Sentry\Users\PasswordRequiredException $e) {
+            $result['error'] = trans('session.passwordrequired');
+        } catch (\Cartalyst\Sentry\Users\WrongPasswordException $e) {
+            $result['error'] = trans('session.wrongpassword');
+        } catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
+            $result['error'] = trans('session.notfound');
+        } catch (\Cartalyst\Sentry\Users\UserNotActivatedException $e) {
+            $result['error'] = trans('session.notactive');
+        } catch (\Cartalyst\Sentry\Throttling\UserSuspendedException $e) {
             $time = $throttle->getSuspensionTime();
             $result['error'] = trans('session.suspended');
         } catch (\Cartalyst\Sentry\Throttling\UserBannedException $e) {
             $result['error'] = trans('session.banned');
-        }
-        catch (\Cartalyst\Sentry\Users\UserNotFoundException $e) {
-            $result['error'] = trans('session.invalid');
-        } catch (\Cartalyst\Sentry\Users\UserNotActivatedException $e) {
-           $result['error'] = trans('session.notactive');
+        } catch (\Exception $e) {
+            $result['error'] = trans('user.generror');
         }
         return $result;
     }

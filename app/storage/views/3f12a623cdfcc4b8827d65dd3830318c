@@ -1,0 +1,7 @@
+<?php $__env->startSection('content'); ?>
+<div class="content" data-ui-view></div>
+    <script type="text/javascript">
+        window.user = <?php echo $data['user']; ?>; 
+        document.cookie = "XSRF-TOKEN=<?php echo $data['token']; ?>";
+    </script>
+<?php $__env->stopSection(); ?>

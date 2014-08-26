@@ -53,13 +53,13 @@ class SentryUser implements UserInterface {
                 'username' => $user->getUsername(),
                 'groups' => $groups);
         } 
-        catch (Cartalyst\Sentry\Users\LoginRequiredException $e) {
+        catch (\Cartalyst\Sentry\Users\LoginRequiredException $e) {
              $result['error'] = trans('user.loginreq');
-        } catch (Cartalyst\Sentry\Users\PasswordRequiredException $e) {
+        } catch (\Cartalyst\Sentry\Users\PasswordRequiredException $e) {
              $result['error'] = trans('user.passwordreq');;
-        } catch (Cartalyst\Sentry\Users\UserExistsException $e) {
+        } catch (\Cartalyst\Sentry\Users\UserExistsException $e) {
             $result['error'] = trans('user.exists');
-        } catch (Cartalyst\Sentry\Groups\GroupNotFoundException $e) {
+        } catch (\Cartalyst\Sentry\Groups\GroupNotFoundException $e) {
             $result['error'] = trans('user.notfoundgroup');
         }
         catch (\Illuminate\Database\QueryException $e) {
@@ -110,6 +110,8 @@ class SentryUser implements UserInterface {
             }
         } catch (\Cartalyst\Sentry\Users\LoginRequiredException $e) {
             $result['error'] = trans('user.loginreq');
+        } catch (\Cartalyst\Sentry\Users\PasswordRequiredException $e) {
+            $result['error'] = trans('user.passwordreq');
         } catch (\Cartalyst\Sentry\Users\UserExistsException $e) {
             $result['error'] = trans('user.exists');
         } catch (\Cartalyst\Sentry\Users\LoginRequiredException $e) {

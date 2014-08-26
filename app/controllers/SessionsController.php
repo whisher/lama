@@ -35,7 +35,7 @@ class SessionsController extends Controller {
                 Event::fire('session.login', array('data'=>$result['user']));
                 return Response::json($result, 200);
             }
-            $error = isset($result['error'])?array_pop($result):trans('session.invalid');
+            $error = isset($result['error'])?array_pop($result):trans('session.notfound');
             return Response::json(array(
                         'success' => 0,
                         'errors' => array('error' => array($error))), 200);

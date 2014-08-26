@@ -73,62 +73,62 @@ class UsersTest extends TestCase {
     public function testSignin200Fail() 
     {
          $response = $this->_set200('POST', '/api/v1/signin',array('email'=>'user@user.com','password'=>'pippo'));
-         $this->assertEquals(0, $this->_getSuccess($response->getContent()));
+         $this->assertSame(0, $this->_getSuccess($response->getContent()));
     }
     
     public function testSignin200Success() 
     {
          $response = $this->_set200('POST', '/api/v1/signin',array('email'=>'user@user.com','password'=>'sentryuser'));
-         $this->assertEquals(1, $this->_getSuccess($response->getContent()));
+         $this->assertSame(1, $this->_getSuccess($response->getContent()));
     }
     
     public function testUserRegister404() 
     {
-        $this->_set404('POST', '/api/v1/user');
+        $this->_set404('POST', '/api/v1/users');
     }
     
     public function testUserRegister200() 
     {
-        $this->_set200('POST', '/api/v1/user');
+        $this->_set200('POST', '/api/v1/users');
     }
     
     public function testUserCreate404() 
     {
-        $this->_set404('POST', '/api/v1/user/create');
+        $this->_set404('POST', '/api/v1/users/create');
     }
     
     public function testUserCreate401() 
     {
-        $this->_set401('POST', '/api/v1/user/create');
+        $this->_set401('POST', '/api/v1/users/create');
     }
     
     public function testUserCreate403() 
     { 
         $this->beUser();
-        $this->_set403('POST', '/api/v1/user/create');
+        $this->_set403('POST', '/api/v1/users/create');
     }
     
     public function testUserCreate200() 
     {
         $this->beAdmin();
-        $response = $this->_set200('POST', '/api/v1/user/create');
+        $response = $this->_set200('POST', '/api/v1/users/create');
         
     }
     
     public function testUserForgot404() 
     {
-        $this->_set404('POST', '/api/v1/user/forgot');
+        $this->_set404('POST', '/api/v1/users/forgot');
     }
     
     public function testUserForgot200Fail() 
     {
-         $response = $this->_set200('POST', '/api/v1/user/forgot',array('email'=>'test@test.com'));
-         $this->assertEquals(0, $this->_getSuccess($response->getContent()));
+         $response = $this->_set200('POST', '/api/v1/users/forgot',array('email'=>'test@test.com'));
+         $this->assertSame(0, $this->_getSuccess($response->getContent()));
     }
     
     public function testUserForgot200Success() 
     {
-        $response = $this->_set200('POST', '/api/v1/forgot',array('email'=>$this->userEmail));
-        $this->assertEquals(1, $this->_getSuccess($response->getContent()));
+        $response = $this->_set200('POST', '/api/v1/users/forgot',array('email'=>$this->userEmail));
+        $this->assertSame(1, $this->_getSuccess($response->getContent()));
     }
 }

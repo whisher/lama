@@ -95,7 +95,8 @@ class SentryUser implements UserInterface {
                 'email' => $user->getEmail(),
                 'fullname' => $user->getFullname(),
                 'username' => $user->getUsername(),
-                'groups' => array('Users'));
+                'groups' => array('Users'),
+                'activated'=>$user->getActivated());
             $userGroup = $this->sentry->getGroupProvider()->findByName('Users');
             // Assign the groups to the users
             $user->addGroup($userGroup);

@@ -18,16 +18,18 @@ class SentryMenu implements MenuInterface {
      * 
      * @return Array      
      */
-    public function get()
+    public function get() 
     {
-       $userMenu = array();
-       foreach ($this->menus as $menu){
-           $tmp = json_decode($menu, true);
-           if(is_null($tmp['permission']) || $this->hasAccess($tmp['permission'])){
-              $userMenu[] = $tmp;  
-           }
-       } 
-       return $userMenu;
+        $userMenu = array();
+        if(count($this->menus) > 0) {
+            foreach ($this->menus as $menu) {
+                $tmp = json_decode($menu, true);
+                if (is_null($tmp['permission']) || $this->hasAccess($tmp['permission'])) {
+                    $userMenu[] = $tmp;
+                }
+            }
+        }
+        return $userMenu;
     }
     
     public function set(array $menus)

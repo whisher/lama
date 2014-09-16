@@ -51,7 +51,7 @@ angular.module('lama.users')
             $scope.errors = null;
             $scope.save = function(){
                $scope.user.groups = Object.keys($scope.user.groups);
-               User.register($scope.user).then(
+               Users.create($scope.user).then(
                     function(data) {
                         if(data.success){
                            return $state.go('user_actions.list');
@@ -85,7 +85,8 @@ angular.module('lama.users')
     .controller('UserEditController', ['$scope', '$state', 'groups', 'user', 'Users', 
         function ($scope, $state, groups, user, Users) {
             $scope.groups = groups;
-            $scope.user = user;
+            var original = user;
+            $scope.user = Users.copy(original);
             var userHasGroup = {};
             //  trasform user.groups for checkbox
             angular.forEach($scope.user.groups, function(value, key) {
@@ -97,20 +98,16 @@ angular.module('lama.users')
                }
             },userHasGroup);
             $scope.user.groups = userHasGroup;
-            var edit = Users.edit($scope.user.id);
             $scope.errors = null;
             $scope.save = function(){
-                edit.fullname = $scope.user.fullname;
-                edit.email = $scope.user.email;
-                edit.username = $scope.user.username;
-                //to avoid send id with false value
+               //to avoid send id with false value
                 angular.forEach($scope.user.groups, function(value, key) {
                     if(!value){
                         delete $scope.user.groups[key];
                     }
                 });   
-                edit.groups  = $scope.user.groups;
-                edit.put().then(
+                
+                $scope.user.put().then(
                     function(data) {
                         if(data.success){
                             return $state.go('user_actions.list');

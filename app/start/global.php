@@ -53,7 +53,7 @@ App::error(function(Exception $exception, $code)
     if (Config::get('app.debug')) {
     	return;
     }
-
+ 
     switch ($code)
     {
        case 403:
@@ -95,7 +95,6 @@ App::down(function()
 */
 
 require app_path().'/filters.php';
-// Require the observables file.
 require app_path().'/events.php';
 
 

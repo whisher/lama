@@ -12,13 +12,16 @@ class MenusController extends Controller
     public function __construct(MenuInterface $menu) 
     {
         $this->menu = $menu;
-        $menus = Request::input();
-        $this->menu->set($menus['menus']);
     }
     
     public function index() 
     {
-       return $this->menu->get();
+        $menus = Request::input();
+        if(!isset($menus['menus'])){
+           return Response::make('Not Found', 404); 
+        }
+        $this->menu->set($menus['menus']);
+        return $this->menu->get();
     }
     
 }

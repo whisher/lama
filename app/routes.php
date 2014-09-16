@@ -18,7 +18,7 @@ Route::group(array('prefix' => 'api/v1', 'before' => 'xhr|xsrf'), function() {
     Route::get('issessionedin', array('before' => 'issessionedin', function(){}));
     Route::get('isloggedin', array('before' => 'isloggedin', function(){}));
     Route::get('hasaccess/{permission}', array('before' => 'hasAccessSession', function(){}));
-    /* FIX base and edit */
+    
     /* User */
     Route::post('users', array('as' => 'users.register', 'uses' => 'App\Controllers\UsersController@register'))->before('issessionedin');
     Route::post('users/create', array('as' => 'users.create', 'uses' => 'App\Controllers\UsersController@create'))->before('hasAccess:users');
@@ -28,17 +28,17 @@ Route::group(array('prefix' => 'api/v1', 'before' => 'xhr|xsrf'), function() {
     Route::put('users/{id}', array('as' => 'users.edit', 'uses' => 'App\Controllers\UsersController@edit'))->where('id', '[0-9]+')->before('hasAccess:users');
     Route::put('users/{id}/account', array('as' => 'users.account', 'uses' => 'App\Controllers\UsersController@account'))->where('id', '[0-9]+')->before('hasAccessAndIsOwner:users.account');
     Route::put('users/{id}/password', array('as' => 'users.password', 'uses' => 'App\Controllers\UsersController@password'))->where('id', '[0-9]+')->before('hasAccessAndIsOwner:users.password');
-    Route::put('users/{id}/edit', array('as' => 'users.edit', 'uses' => 'App\Controllers\UsersController@edit'))->where('id', '[0-9]+')->before('hasAccess:users');
     Route::put('users/{id}/suspend', array('as' => 'users.suspend', 'uses' => 'App\Controllers\UsersController@suspend'))->where('id', '[0-9]+')->before('hasAccess:users');
     Route::put('users/{id}/unsuspend', array('as' => 'users.unsuspend', 'uses' => 'App\Controllers\UsersController@unsuspend'))->where('id', '[0-9]+')->before('hasAccess:users');
     Route::put('users/{id}/ban', array('as' => 'users.ban', 'uses' => 'App\Controllers\UsersController@ban'))->where('id', '[0-9]+')->before('hasAccess:users');
     Route::delete('users/{id}', array('as' => 'users.destroy', 'uses' => 'App\Controllers\UsersController@destroy'))->where('id', '[0-9]+')->before('hasAccess:users');
  
     /* group */
-    Route::get('groups', array('as' => 'groups.index', 'uses' => 'App\Controllers\GroupsController@index'));
+    Route::get('groups', array('as' => 'groups.index', 'uses' => 'App\Controllers\GroupsController@index'))->before('hasAccess:users');
     
     /* menu */
     Route::get('users/menus', array('as' => 'menus', 'uses' => 'App\Controllers\MenusController@index'));
+
     
  });
 
@@ -47,9 +47,8 @@ Route::get('users/{id}/reset/{code}', array('as' => 'users.reset', 'uses' => 'Ap
 
 Route::get('users/newpassword', array('as' => 'users.newpassword', function()
 {
-	return View::make('users.newpassword');
+    return View::make('users.newpassword');
 }));
-
 
 
 /* Session */

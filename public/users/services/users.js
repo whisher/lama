@@ -13,14 +13,11 @@ angular.module('lama.users')
             this.password = function(id){
                 return this.one(id).one('password');
             };
-            this.register = function(data){
-                return this.all('user/create').post(data);
+            this.create = function(data){
+                return this.all('users/create').post(data);
             };
             this.forgot = function(data){
-                return this.all('user/forgot').post(data);
-            };
-            this.edit = function(id){
-                return this.one(id).one('edit');
+                return this.all('users/forgot').post(data);
             };
             this.suspend = function(id){
                 return this.one(id).one('suspend');

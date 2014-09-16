@@ -84,8 +84,8 @@ class UsersController extends Controller{
         if ($result['success'] > 0) {
             $this->user->login($result['user'], false);
             return Redirect::route('home');
-        } 
-        return View::make('errors.404');
+        }  
+        return Response::make('Not Found', 404);
     }
     
     /**
@@ -229,7 +229,7 @@ class UsersController extends Controller{
             Event::fire('user.mail.newpassword',array('data'=>$result['user']));
             return Redirect::to(\URL::route('home') . "/#!/user/reset-thanks");
         } 
-        return View::make('errors.404');
+        return Response::make('Not Found', 404);
     }
 
     /**

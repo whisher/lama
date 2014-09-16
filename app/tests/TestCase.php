@@ -74,8 +74,8 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
     public function setUpDb()
     {
         Artisan::call('migrate', array('--package'=>'cartalyst/sentry'));
-      Artisan::call('migrate');
-      Artisan::call('db:seed');
+        Artisan::call('migrate');
+        Artisan::call('db:seed');
     }
 
    

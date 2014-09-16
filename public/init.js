@@ -45,7 +45,7 @@ angular.module('lama', ['ui.router','restangular','lama.system','lama.users'])
         queryMenu(menus);
         
         $rootScope.$on('loggedin', function(event,user) {
-            console.log('kkk');
+            
             queryMenu(menus);
                 
             $rootScope.global = {

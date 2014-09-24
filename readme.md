@@ -33,8 +33,8 @@ LAMA is a boilerplate that provides a nice starting point for Laravel/Sentry and
     bower install
     
 ## Grunt
-   grunt (run the app at http://localhost:8000)
-   grunt prod (build css and js)
-   grunt unit (unit test) 
-   grunt e2e (end to end test)
+    grunt (run the app at http://localhost:8000)
+    grunt prod (build css and js)
+    grunt unit (unit test) 
+    grunt e2e (end to end test)
 

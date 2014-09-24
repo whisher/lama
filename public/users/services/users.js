@@ -7,6 +7,9 @@ angular.module('lama.users')
     }])
     .factory('Users', ['Restify', function(Restify) {
         function Users() {
+            this.signin = function(data){
+                return this.all('signin').post(data);
+            };
             this.account = function(id){
                 return this.one(id).one('account');
             };

@@ -1,23 +1,20 @@
 'use strict';
 
 angular.module('lama.users')
-    .controller('SessionSigninController', ['$scope', '$rootScope', '$http', '$state',
-        function($scope, $rootScope, $http, $state) {
+    .controller('SessionSigninController', ['$scope', '$rootScope', 'Users', '$state',
+        function($scope, $rootScope, Users, $state) {
             $scope.user = {};
             $scope.errors = [];
-           
             $scope.save = function() {
-                $http.post('/api/v1/signin', $scope.user).then(
-                function(response) {
-                    var data = response.data;
-                    if(data.success){
-                       // $rootScope.global.user = data.user;
-                        $rootScope.$emit('loggedin',data.user);
-                        return $state.go('home');
+                Users.signin($scope.user).then(
+                    function(data) { 
+                        if(data.success){
+                            $rootScope.$emit('loggedin',data.user);
+                            return $state.go('home');
+                        }
+                        $scope.errors = data.errors;
                     }
-                    $scope.errors = data.errors;
-                }
-            );
+                );
             };
         }
     ])
@@ -31,7 +28,7 @@ angular.module('lama.users')
                 Users.post($scope.user).then(
                     function(data) {
                         if(data.success){
-                            if(data.logged > 0){//$rootScope.global.user = data.user;
+                            if(data.logged > 0){
                                 $rootScope.$emit('loggedin',data.user);
                                 return $state.go('home');
                             }
@@ -50,7 +47,7 @@ angular.module('lama.users')
     .controller('SessionForgotPasswordController', ['$scope', '$state', 'Users',
         function($scope, $state, Users) {
             $scope.user = {};
-            $scope.errors = null;
+            $scope.errors = [];
             $scope.save = function(){
                 Users.forgot($scope.user).then(
                     function(data) {

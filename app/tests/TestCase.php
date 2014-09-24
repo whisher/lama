@@ -63,6 +63,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
      */
     public function teardown()
     {
+        $this->teardownDb();
         Sentry::logout();
         Session::flush();
     }

@@ -1,13 +1,13 @@
-'use strict';
 describe('homepage', function() {
     beforeEach(function() {
-        browser.get('http://127.0.0.1:9000/');
+        browser.get('/');
     });
-
-    it('should find title element', function() {
-        browser.get('app/index.html');
-        browser.debugger();
-        element(by.binding('user.name'));
+    it('should load home', function() {
+       var jumbotron = element.all(by.css('.jumbotron h1'));
+       expect(jumbotron.count()).toBe(1);
     });
-    
+    it('should load the menu', function() {
+       var nav = element.all(by.css('ul.navbar-left li a'));
+       expect(nav.count()).toBe(1);
+    });
 });

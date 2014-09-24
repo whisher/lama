@@ -482,8 +482,17 @@ class UsersTest extends TestCase {
     {
         $response = $this->call('GET', '/users/1/reset/fakecode'); 
         $this->assertResponseStatus(404);
-        
     }
+    
+    public function testResetSuccess() 
+    {
+        $response = $this->_set200('POST', '/api/v1/users/forgot',array('email'=>$this->userEmail));
+        $user = Sentry::findUserByLogin($this->userEmail);
+        $response = $this->call('GET', '/users/'.$user->id.'/reset/'.$user->reset_password_code); 
+        $this->assertRedirectedTo('/#!/user/reset-thanks');
+    }
+    
+    // SessionsController@destroy
     
     public function testLogout() 
     {

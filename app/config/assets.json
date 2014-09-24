@@ -25,6 +25,7 @@
        "js": {
             "public/build/js/scripts.min.js": [
                 "public/init.js",
+                "public/lama.js",
                 "public/system/system.js",
                 "public/system/controllers/*.js",
                 "public/system/directives/*.js",

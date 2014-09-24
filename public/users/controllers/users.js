@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('lama.users')
-    .controller('UserController', ['$scope', '$state', 'users', 'Users','Paginator','CurrentPageMemory',
-        function($scope, $state, users, Users, Paginator, CurrentPageMemory) {
+    .controller('UserController', ['$scope', '$state', 'users', 'Users', 'Paginator', 'PAGINATOR', 'CurrentPageMemory',
+        function($scope, $state, users, Users, Paginator, PAGINATOR, CurrentPageMemory) {
             
             $scope.hasUsers = users.length > 0;
-            $scope.paginator =  Paginator(2,5,users);
+            $scope.paginator =  Paginator(PAGINATOR.size, PAGINATOR.range, users);
             if(CurrentPageMemory.get() > 1){
                 $scope.paginator.toPageId(CurrentPageMemory.get());
             }

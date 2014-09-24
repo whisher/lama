@@ -16,7 +16,7 @@ angular.module('lama.users')
             link: function(scope, element) {
                 var status = scope.currentUser.status;
                 if(status==='Banned'){
-                    element.text('Un-ban');
+                    element.text('Unban');
                 }
                 else{
                     element.text('Ban');
@@ -26,7 +26,7 @@ angular.module('lama.users')
                     scope.ban(scope.currentUser.id)
                     .then(function(data) {
                         var status =  data.ban > 0 ? 'Banned' : 'Active';
-                        var action =  data.ban > 0 ? 'Un-ban' : 'Ban';
+                        var action =  data.ban > 0 ? 'Unban' : 'Ban';
                         $('#user-status-'+scope.currentUser.id).text(status);
                         scope.currentUser.status = status;
                         element.text(action);

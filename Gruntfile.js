@@ -61,12 +61,25 @@ module.exports = function(grunt) {
             src: paths.css
         },
         laravel:{
-           dist:{}
+            dist:{},
+            e2e: {
+                options: {
+                    open: false
+                }
+            }
         },
         concurrent: {
-            tasks: ['laravel', 'watch'],
-            options: {
-                logConcurrentOutput: true
+            all:{
+                tasks: ['laravel:dist', 'watch'],
+                options: {
+                    logConcurrentOutput: true
+                }
+            },
+            e2e:{
+                tasks: ['laravel:e2e', 'protractor:all'],
+                options: {
+                    logConcurrentOutput: true
+                }
             }
         },
         concat:{
@@ -93,17 +106,25 @@ module.exports = function(grunt) {
             }
         },
         karma: {
-            unit: {
+            all: {
                 configFile: 'karma.conf.js'
             }
+        },
+        protractor: {
+            options: {
+                configFile: 'protractor.conf.js',
+                keepAlive: true
+            },
+            all: {}
         }
     });
     
     grunt.loadTasks('tasks');  
     require('load-grunt-tasks')(grunt);
     
-    grunt.registerTask('default', ['jshint','concurrent']);
+    grunt.registerTask('default', ['jshint','concurrent:all']);
     grunt.registerTask('prod', ['clean', 'concat', 'cssmin','uglify']);
-    grunt.registerTask('test', ['karma:unit']);
+    grunt.registerTask('unit', ['karma:all']);
+    grunt.registerTask('e2e', ['concurrent:e2e']);
 
 };

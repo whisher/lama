@@ -6,7 +6,7 @@ LAMA is a boilerplate that provides a nice starting point for Laravel/Sentry and
 * [MEAN fullstack javascript framework](http://mean.io)
 
 ## Features
-* Handy assetsmanager don't need to add your assets (css,js) in the main template and in the grunt/gulp file
+* Handy assetsmanager don't need to add your assets (css,js) in the main template and in the gruntfile
 * JSON Vulnerability Protection
 * Cross Site Request Forgery (XSRF) Protection
 * Run with grunt (php artisan serve)
@@ -17,6 +17,7 @@ LAMA is a boilerplate that provides a nice starting point for Laravel/Sentry and
 * Grunt - The JavaScript Task Runner, installing [Grunt](http://gruntjs.com/)
 * Bower - Web package manager, installing [Bower](http://bower.io/)
 * Karma - A test runner for angularjs, installing [Karma](http://karma-runner.github.io/0.12/index.html/)  
+* Protractor - Protractor is an end-to-end test framework, installing [Protractor](http://angular.github.io/protractor/#/tutorial) 
 
 ## Quick Install
     git clone https://github.com/whisher/lama.git
@@ -28,15 +29,12 @@ LAMA is a boilerplate that provides a nice starting point for Laravel/Sentry and
     php artisan migrate
     php artisan db:seed
     php artisan key:generate
-    bower install
     npm install
+    bower install
+    
+## Grunt
+   grunt (run the app at http://localhost:8000)
+   grunt prod (build css and js)
+   grunt unit (unit test) 
+   grunt e2e (end to end test)
 
-## Quick Install testing
-    set the project url in tests app/tests/acceptance.suite.yml
-    provide your database test credentials in codeception.yml
-    php artisan migrate --package=cartalyst/sentry --env="testing"
-    php artisan migrate --seed --env="testing"
-
-## TODO
-   bug reset password too much info
-   rename User

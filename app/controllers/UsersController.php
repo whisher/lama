@@ -227,7 +227,7 @@ class UsersController extends Controller{
         $result = $this->user->resetPassword($id, $code);
         if (isset($result['user']) && ($result['success'] > 0)) {
             Event::fire('user.mail.newpassword',array('data'=>$result['user']));
-            return Redirect::to(\URL::route('home') . "/#!/user/reset-thanks");
+            return Redirect::to(\URL::route('home') . '/#!/user/reset-thanks');
         } 
         return Response::make('Not Found', 404);
     }
